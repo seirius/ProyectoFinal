@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dark Sky - Crear Post</title>
+	<meta name="viewport" content="width=device-width, initial-scale = 1" />
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<link rel="stylesheet" href="../css/myCSS.css">
+	<link rel="stylesheet" href="../css/testCSS.css">
+	<link rel="stylesheet" href="../css/myFonts.css" />
+	<script src="../js/jquery-1.11.3.js"></script>
+	<script src="../js/bootstrap.js"></script>
+</head>
+<body>
+	<div class="container">
+		<form action="../CrearPost" method="POST">
+			<div class="row">
+				<h2 class="text-center">Nueva Entrada</h2>
+			</div>
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="form-group">
+						<label for="tituloPostID">Titulo</label>
+						<input type="text" name="tituloPost" id="tituloPostID" maxlength="50" class="form-control" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<label for="postTextID">Texto</label>
+					<textarea name="postText" id="postTextID" maxlength="1000" rows="15" class="form-control"></textarea>
+				</div>
+			</div>
+			<div class="row topSpace-1">
+				<div class="col-lg-3 col-lg-offset-7">
+					<button type="submit" id="botonCrearEntrada" class="btn btn-primary btn-block">Crear Entrada</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

@@ -11,16 +11,25 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <servlet>
+    <servlet-name>CrearPost</servlet-name>
+    <servlet-class>main.servlets.CrearPost</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CrearPost</servlet-name>
+    <url-pattern>/CrearPost</url-pattern>
+  </servlet-mapping>
+  
   <context-param>
-  	<param-name>mysql_url</param-name>
-  	<param-value>jdbc:mysql://localhost/dark_sky?</param-value>
+    <param-name>mysql_url</param-name>
+    <param-value>jdbc:mysql://localhost/dark_sky?</param-value>
   </context-param>
   <context-param>
-  	<param-name>mysql_usuario</param-name>
-  	<param-value>andriy</param-value>
+    <param-name>mysql_usuario</param-name>
+    <param-value>andriy</param-value>
   </context-param>
   <context-param>
-  	<param-name>mysql_pw</param-name>
-  	<param-value>andriy</param-value>
+    <param-name>mysql_pw</param-name>
+    <param-value>andriy</param-value>
   </context-param>
 </web-app>

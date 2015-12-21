@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 
 public class PostContador {
@@ -15,32 +16,29 @@ public class PostContador {
 		this.connection = connection;
 	}
 	
-	public int getPostContador() throws ErrorNoLogico {
+	public int getPostContador() throws ErrorNoLogico, ErrorLogico {
 		int postContador = -1;
 		
 		try {
 			connection.setAutoCommit(false);
 			//Seleccionar contador
-			String sql = "SELECT CONTADOR FROM POST_CONTADOR FOR UPDATE";
-			Statement orden = connection.createStatement();
-			ResultSet cursor = orden.executeQuery(sql);
-			cursor.next();
-			postContador = cursor.getInt("CONTADOR");
-			cursor.close();
+			postContador = select();
 			
 			//Update contador
-			sql = "UPDATE POST_CONTADOR SET CONTADOR = CONTADOR + 1";
-			int resUpdate = orden.executeUpdate(sql);
+			int resUpdate = update();
 			
-			if (resUpdate != 1) throw new ErrorNoLogico("No se ha podido actualizar el contador de la tabla POST_CONTADOR");
+			if (resUpdate != 1) {
+				connection.rollback();
+				throw new ErrorLogico("No se ha podido actualizar el contador de la tabla POST_CONTADOR");
+			}
 			
 			connection.commit();
+			
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
-				connection.setAutoCommit(true);
 			} catch (SQLException e1) {
-				throw new ErrorNoLogico(e.getMessage());
+				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
 		} finally {
@@ -53,4 +51,29 @@ public class PostContador {
 		
 		return postContador;
 	}
+	
+	public int select() throws SQLException {
+		String sql = "SELECT CONTADOR FROM POST_CONTADOR FOR UPDATE";
+		Statement orden = connection.createStatement();
+		ResultSet cursor = orden.executeQuery(sql);
+		cursor.next();
+		int postContador = cursor.getInt("CONTADOR");
+		cursor.close();
+		return postContador;
+	}
+	
+	public int update() throws SQLException {
+		String sql = "UPDATE POST_CONTADOR SET CONTADOR = CONTADOR + 1";
+		Statement orden = connection.createStatement();
+		int resUpdate = orden.executeUpdate(sql);
+		return resUpdate;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

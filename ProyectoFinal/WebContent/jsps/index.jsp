@@ -30,9 +30,6 @@
 	try {
 		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
 		connection = msql.getConnection();
-		
-		PostComments comments = new PostComments(connection);
-		comments.comment(0, "Hello from a comment!");
 	%>
 	<div class="container-fluid">
 		<div class="row">

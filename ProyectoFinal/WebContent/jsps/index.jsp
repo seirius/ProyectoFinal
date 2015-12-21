@@ -1,3 +1,5 @@
+<%@page import="main.bbdd_handlers.PostComments"%>
+<%@page import="main.bbdd_handlers.PostInfo"%>
 <%@page import="bbdd.MySQLConnection"%>
 <%@page import="main.util.ErrorNoLogico"%>
 <%@page import="main.noticias_portada.Noticia"%>
@@ -28,6 +30,9 @@
 	try {
 		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
 		connection = msql.getConnection();
+		
+		PostComments comments = new PostComments(connection);
+		comments.comment(0, "Hello from a comment!");
 	%>
 	<div class="container-fluid">
 		<div class="row">

@@ -33,6 +33,8 @@ public class PostContador {
 			int resUpdate = orden.executeUpdate(sql);
 			
 			if (resUpdate != 1) throw new ErrorNoLogico("No se ha podido actualizar el contador de la tabla POST_CONTADOR");
+			
+			connection.commit();
 		} catch(SQLException e) {
 			try {
 				connection.rollback();

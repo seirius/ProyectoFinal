@@ -11,6 +11,14 @@ public class UtilidadesBBDD {
 		return cadena;
 	}
 	
+	public static boolean comprobarStringVacionNulo(String cadena) {
+		if (cadena == null || cadena == "") {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public static String setMinLen(String string, int minLen, char addChar) {
 		int curLen = string.length();
 		minLen -= curLen;

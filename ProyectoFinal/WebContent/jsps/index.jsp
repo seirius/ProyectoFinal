@@ -3,7 +3,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="main.noticias_portada.NoticiasPortada"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="bbdd.MySQLConnection"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

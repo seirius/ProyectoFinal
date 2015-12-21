@@ -1,0 +1,158 @@
+@CHARSET "ISO-8859-1";
+
+.topSpace {
+	margin-top: 4rem;
+}
+
+.topSpace-1 {
+	margin-top: 1rem;
+}
+
+#titulo {
+	height: 125px;
+	background-image: url("../img/clouds.png");
+	background-position: cover;
+	background-repeat: no-repeat;
+	color: white;
+	font-size: 6rem;
+	font-family: titlePixelFont;
+	padding-top: 2rem;
+}
+
+#titulo > span:first-child {
+	color: white;
+}
+
+#titulo > span:last-child {
+	color: dodgerblue;
+}
+
+#myMenu {
+	height: 75px;
+}
+
+.bloque {
+	font-size: 3rem;
+}
+
+#contenido {
+	overflow: hidden;
+	/*box-shadow: 0px 10px 20px black; */
+	border: 32px solid transparent;
+	border-image: url("../img/Tests/grassBorders.png") 30% round;
+	position: relative;
+}
+
+#contenidoFondo {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url("../img/Tests/grassBG.png");
+}
+
+#fondo {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	/*background-color: purple;*/
+	background-image: url("../img/background_1.png");
+	background-repeat: repeat;
+}
+
+#contenedorCajas {
+	/*background-color: yellow;*/
+	padding-bottom: 1rem;
+}
+
+#contenedorExtra {
+	/*background-color: green;*/
+	padding-bottom: 1rem;
+}
+
+.caja {
+	height: 300px;
+	/*background-color: fuchsia; */
+	margin-top: 1rem;
+	border: 32px solid transparent;
+	border-image: url("../img/Tests/grassToVoid.png") 30% round;
+	background-image: url("../img/Tests/blackDirt.png");
+	position: relative;
+}
+
+.cajaFondo {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url("../img/Tests/blackDirt.png");
+}
+
+.imgCaja {
+	height: 100%;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	/*background-color: orange;*/
+}
+
+.imagenClase {
+	width: 100%;
+	height: 100%;
+}
+
+.textoCaja {
+	height: 100%;
+	color: white;
+	/*background-color: silver;*/
+}
+
+.cajaExtra {
+	height: 400px;
+	/*background-color: olive;*/
+	margin-top: 1rem;
+	border: 32px solid transparent;
+	border-image: url("../img/Tests/dirt.png") 30% round;
+	position: relative;
+}
+
+.cajaExtraFondo {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-image: url("../img/Tests/genBorderMainContent.png");
+}
+
+.navbar-inverse {
+	margin: 0;
+	border-radius: 0;
+	background-image: url("../img/menuBar.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	box-shadow: 0px 5px 20px black;
+}
+
+.navbar-inverse .navbar-nav > li {
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	font-family: menuPixelfont;
+	font-size: 3rem;
+	color: rgb(244, 225, 185);
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+	color: rgb(50, 128, 246);
+}
+
+
+.myActive {
+	box-shadow: inset 0 0 50px rgb(47, 34, 54); /*rgb(255, 140, 0)*/
+	border: 2px solid black;
+	margin: -2px 4px -2px -2px;
+}
+
+
+
+
+
+
+
+
+

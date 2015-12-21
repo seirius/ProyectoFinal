@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+
+@font-face {
+    font-family: titlePixelFont;
+    src: url('../fonts/origap__.ttf');
+}
+
+@font-face {
+    font-family: menuPixelFont;
+    src: url('../fonts/ice_pixel-7.ttf');
+}

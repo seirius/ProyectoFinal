@@ -10,4 +10,17 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <context-param>
+  	<param-name>mysql_url</param-name>
+  	<param-value>jdbc:mysql://localhost/dark_sky?</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>mysql_usuario</param-name>
+  	<param-value>andriy</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>mysql_pw</param-name>
+  	<param-value>andriy</param-value>
+  </context-param>
 </web-app>

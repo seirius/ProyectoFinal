@@ -1,3 +1,4 @@
+<%@page import="bbdd.MySQLConnection"%>
 <%@page import="main.util.ErrorNoLogico"%>
 <%@page import="main.noticias_portada.Noticia"%>
 <%@page import="java.util.ArrayList"%>
@@ -20,9 +21,12 @@
 <body>
 	<%
 	Connection connection = null;
+	String mysql_url = application.getInitParameter("mysql_url");
+	String usuario = application.getInitParameter("mysql_usuario");
+	String pw = application.getInitParameter("mysql_pw");
 	
 	try {
-		MySQLConnection msql = new MySQLConnection();
+		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
 		connection = msql.getConnection();
 	%>
 	<div class="container-fluid">

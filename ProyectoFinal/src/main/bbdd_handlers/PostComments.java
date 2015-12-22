@@ -31,7 +31,6 @@ public class PostComments {
 			insert(idComment, idPost, texto);
 			
 			connection.commit();
-			connection.setAutoCommit(true);
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -39,6 +38,12 @@ public class PostComments {
 				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
+		} finally {
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				throw new ErrorNoLogico(e.getMessage());
+			}
 		}
 	}
 	

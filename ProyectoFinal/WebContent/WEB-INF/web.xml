@@ -10,7 +10,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <servlet-name>CrearPost</servlet-name>
     <servlet-class>main.servlets.CrearPost</servlet-class>
@@ -19,7 +18,22 @@
     <servlet-name>CrearPost</servlet-name>
     <url-pattern>/CrearPost</url-pattern>
   </servlet-mapping>
-  
+  <servlet>
+    <servlet-name>PublicarComentario</servlet-name>
+    <servlet-class>main.servlets.PublicarComentario</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PublicarComentario</servlet-name>
+    <url-pattern>/PublicarComentario</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CrearCuentaUsuario</servlet-name>
+    <servlet-class>main.servlets.CrearCuentaUsuario</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CrearCuentaUsuario</servlet-name>
+    <url-pattern>/CrearCuentaUsuario</url-pattern>
+  </servlet-mapping>
   <context-param>
     <param-name>mysql_url</param-name>
     <param-value>jdbc:mysql://localhost/dark_sky?</param-value>

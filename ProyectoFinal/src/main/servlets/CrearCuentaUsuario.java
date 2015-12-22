@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bbdd.MySQLConnection;
-import main.bbdd_handlers.PostInfo;
+import main.bbdd_handlers.CuentasUsuario;
 import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 
-public class CrearPost extends HttpServlet {
+public class CrearCuentaUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public CrearPost() {
+    public CrearCuentaUsuario() {
         super();
     }
 
@@ -26,30 +26,32 @@ public class CrearPost extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		Connection connection = null;
-		
 		String mysql_url = getServletContext().getInitParameter("mysql_url");
-		String usuario = getServletContext().getInitParameter("mysql_usuario");
-		String pw = getServletContext().getInitParameter("mysql_pw");
+		String mysql_usuario = getServletContext().getInitParameter("mysql_usuario");
+		String mysql_pw = getServletContext().getInitParameter("mysql_pw");
 		
-		String titulo = request.getParameter("tituloPost");
-		String texto = request.getParameter("postText");
+		String usuario = request.getParameter("usuario");
+		String pass = request.getParameter("pass");
+		String passR = request.getParameter("passR");
+		
+		if (!pass.equals(passR)) {
+			response.sendRedirect("htmls/crearCuentaUsuario.html");
+			return;
+		}
 		
 		try {
-			MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
+			MySQLConnection msql = new MySQLConnection(mysql_url, mysql_usuario, mysql_pw);
 			connection = msql.getConnection();
-			PostInfo post = new PostInfo(connection);
-			int idPost = post.createPost(titulo, texto, null, null);
-			request.setAttribute("idPost", new Integer(idPost));
-			getServletContext().getRequestDispatcher("/jsps/postAfterCreate.jsp").forward(request, response);
-		} catch(SQLException e) {
-			//Temporal <- Importante
+			CuentasUsuario cuentasUsuario = new CuentasUsuario(connection);
+			cuentasUsuario.ingresarCuentaUsuario(usuario, pass);
+			response.sendRedirect("htmls/login.html");
+		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch(ErrorNoLogico e) {
-			//Temporal <- Importante
+		} catch (ErrorNoLogico e) {
 			e.printStackTrace();
-		} catch(ErrorLogico e) {
-			//Temporal <- Importante
+		} catch (ErrorLogico e) {
 			e.printStackTrace();
 		} finally {
 			try {

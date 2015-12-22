@@ -71,32 +71,14 @@ public class PostInfo {
 		}
 	}
 	
-	public int getCommentID(int id) throws ErrorNoLogico {
-		int idComment = -1;
-		int resUpdate;
-		
-		try {
-			connection.setAutoCommit(false);
-			
-			idComment = selectCommentContador(id);
-			resUpdate = updateCommentContador(id);
-			
-			if (resUpdate != 1) {
-				connection.rollback();
-				throw new ErrorNoLogico("No se ha actualizado COMMENT_CONTADOR con ID = " + id);
-			}
-			
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch(SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			throw new ErrorNoLogico(e.getMessage());
+	public int getCommentID(int id) throws SQLException {
+		int idComment = selectCommentContador(id);
+		int resUpdate = updateCommentContador(id);
+
+		if (resUpdate != 1) {
+			throw new SQLException("No se ha actualizado COMMENT_CONTADOR con ID = " + id);
 		}
-		
+
 		return idComment;
 	}
 	

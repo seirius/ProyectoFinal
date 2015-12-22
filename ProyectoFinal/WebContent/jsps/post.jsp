@@ -53,6 +53,28 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="row">
+					<div class="col-lg-2 col-lg-offset-10">
+						<a href="#" data-toggle="collapse" data-target="#commentDiv">Comentar</a>
+					</div>
+				</div>
+				
+				<div id="commentDiv" class="collapse">
+					<form action="../PublicarComentario?idPost=<%= id %>" method="POST">
+						<div class="form-group">
+							<textarea name="comentario" id="comentario" maxLength="400" rows="10" class="form-control"></textarea>
+						</div>
+						<div class="row">
+							<div class="col-lg-4 col-lg-offset-8">
+								<button type="submit" id="botonPublicComentario" class="btn btn-primary btn-block">Publicar comentario</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 		<%
 		while (hay) {
 			String commentText = comments.getString("TEXTO");

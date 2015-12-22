@@ -39,7 +39,9 @@ public class CrearPost extends HttpServlet {
 			MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
 			connection = msql.getConnection();
 			PostInfo post = new PostInfo(connection);
-			post.createPost(titulo, texto, null, null);
+			int idPost = post.createPost(titulo, texto, null, null);
+			request.setAttribute("idPost", new Integer(idPost));
+			getServletContext().getRequestDispatcher("/jsps/postAfterCreate.jsp").forward(request, response);
 		} catch(SQLException e) {
 			//Temporal <- Importante
 			e.printStackTrace();

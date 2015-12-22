@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import main.bbdd_objects.Post;
 import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 import main.util.MyUtil;
@@ -17,20 +19,33 @@ public class PostInfo {
 		this.connection = connection;
 	}
 	
-	public void createPost(String titulo, String texto, String imagenURL, String etiqueta) throws ErrorLogico, ErrorNoLogico {
+	public int createPost(String titulo, String texto, String imagenURL, String etiqueta) throws ErrorLogico, ErrorNoLogico {
+		int id;
+		
+		if (MyUtil.isNull(titulo)) throw new ErrorLogico("Titulo no puede ser nulo");
+		if (MyUtil.isNull(texto)) throw new ErrorLogico("Texto no puede ser nulo");
 		
 		try {
-			if (MyUtil.isNull(titulo)) throw new ErrorLogico("Titulo no puede ser nulo");
-			if (MyUtil.isNull(texto)) throw new ErrorLogico("Texto no puede ser nulo");
+			
+			connection.setAutoCommit(false);
 			
 			PostContador postContador = new PostContador(connection);
-			int id = postContador.getPostContador();
+			id = postContador.getPostContador();
 			
 			insert(id, titulo, texto, imagenURL, etiqueta);
 			
+			connection.commit();
+			connection.setAutoCommit(true);
 		} catch(SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			throw new ErrorNoLogico(e.getMessage());
 		}
+		
+		return id;
 	}
 	
 	public void deletePost(int id) throws ErrorNoLogico, ErrorLogico {
@@ -45,7 +60,7 @@ public class PostInfo {
 			}
 			
 			connection.commit();
-			
+			connection.setAutoCommit(true);
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -53,12 +68,6 @@ public class PostInfo {
 				e.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
 		}
 	}
 	
@@ -78,7 +87,7 @@ public class PostInfo {
 			}
 			
 			connection.commit();
-			
+			connection.setAutoCommit(true);
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -86,12 +95,6 @@ public class PostInfo {
 				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
 		}
 		
 		return idComment;
@@ -144,7 +147,39 @@ public class PostInfo {
 		return orden.executeUpdate();
 	}
 	
+	public ResultSet getAllPosts() throws ErrorNoLogico {
+		try {
+			String sql = "SELECT ID, TITULO, TEXTO, FECHA_CREACION FROM POST_INFO ORDER BY FECHA_CREACION DESC";
+			Statement orden = connection.createStatement();
+			ResultSet cursor = orden.executeQuery(sql);
+			return cursor;
+		} catch(SQLException e) {
+			throw new ErrorNoLogico(e.getMessage());
+		}
+	}
 	
+	public Post getSinglePost(int id) throws ErrorNoLogico {
+		try {
+			String sql = "SELECT TITULO, TEXTO, IMAGEN_URL, ETIQUETA, FECHA_CREACION, COMMENT_CONTADOR FROM POST_INFO WHERE ID = " + id;
+			Statement orden = connection.createStatement();
+			ResultSet cursor = orden.executeQuery(sql);
+			cursor.next();
+			
+			String titulo = cursor.getString("TITULO");
+			String texto = cursor.getString("TEXTO");
+			String imagenURL = cursor.getString("IMAGEN_URL");
+			String etiqueta = cursor.getString("ETIQUETA");
+			long fechaCreacion = cursor.getTimestamp("FECHA_CREACION").getTime();
+			int commentContador = cursor.getInt("COMMENT_CONTADOR");
+			
+			Post post = new Post(id, titulo, texto, imagenURL, etiqueta, fechaCreacion, commentContador);
+			
+			return post;
+			
+		} catch(SQLException e) {
+			throw new ErrorNoLogico(e.getMessage());
+		}
+	}
 	
 	
 	

@@ -5,9 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import main.util.ErrorLogico;
-import main.util.ErrorNoLogico;
-
 public class PostContador {
 
 	private Connection connection;
@@ -16,39 +13,10 @@ public class PostContador {
 		this.connection = connection;
 	}
 	
-	public int getPostContador() throws ErrorNoLogico, ErrorLogico {
-		int postContador = -1;
-		
-		try {
-			connection.setAutoCommit(false);
-			//Seleccionar contador
-			postContador = select();
-			
-			//Update contador
-			int resUpdate = update();
-			
-			if (resUpdate != 1) {
-				connection.rollback();
-				throw new ErrorLogico("No se ha podido actualizar el contador de la tabla POST_CONTADOR");
-			}
-			
-			connection.commit();
-			
-		} catch(SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
-		}
-		
+	public int getPostContador() throws SQLException {
+		int postContador = select();
+		int resUpdate = update();
+		if (resUpdate != 1) throw new SQLException("No se ha podido actualizar el contador de la tabla POST_CONTADOR");
 		return postContador;
 	}
 	

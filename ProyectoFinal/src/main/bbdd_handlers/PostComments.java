@@ -2,7 +2,9 @@ package main.bbdd_handlers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import main.util.ErrorNoLogico;
 import main.util.MyUtil;
@@ -28,6 +30,8 @@ public class PostComments {
 			
 			insert(idComment, idPost, texto);
 			
+			connection.commit();
+			connection.setAutoCommit(true);
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -35,12 +39,6 @@ public class PostComments {
 				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
 		}
 	}
 	
@@ -57,6 +55,8 @@ public class PostComments {
 			
 			insert(idComment, idPost, texto, upLink);
 			
+			connection.commit();
+			connection.setAutoCommit(true);
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -64,12 +64,6 @@ public class PostComments {
 				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
 		}
 	}
 	
@@ -84,6 +78,9 @@ public class PostComments {
 				throw new ErrorNoLogico("No se ha borrado en POST_COMMENTS con ID_POST = " + idPost + " y ID_COMMENT = " + idComment);
 			}
 			
+			connection.commit();
+			connection.setAutoCommit(true);
+			
 		} catch(SQLException e) {
 			try {
 				connection.rollback();
@@ -91,12 +88,18 @@ public class PostComments {
 				e1.printStackTrace();
 			}
 			throw new ErrorNoLogico(e.getMessage());
-		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				throw new ErrorNoLogico(e.getMessage());
-			}
+		}
+	}
+	
+	public ResultSet getCommentsByPostID(int id) throws ErrorNoLogico {
+		
+		try {
+			String sql = "SELECT ID_COMMENT, TEXTO, FECHA_CREACION, UP_LINK FROM POST_COMMENTS WHERE ID_POST = " + id;
+			Statement orden = connection.createStatement();
+			ResultSet cursor = orden.executeQuery(sql);
+			return cursor;
+		} catch(SQLException e) {
+			throw new ErrorNoLogico(e.getMessage());
 		}
 	}
 	

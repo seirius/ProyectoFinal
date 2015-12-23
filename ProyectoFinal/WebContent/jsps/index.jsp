@@ -1,3 +1,4 @@
+<%@page import="main.connection.InitCon"%>
 <%@page import="main.bbdd_handlers.PostComments"%>
 <%@page import="main.bbdd_handlers.PostInfo"%>
 <%@page import="bbdd.MySQLConnection"%>
@@ -15,22 +16,28 @@
 	<title>Dark Sky - Principal</title>
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
 	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/testCSS.css">
 	<link rel="stylesheet" href="css/myCSS.css">
 	<link rel="stylesheet" href="css/myFonts.css" />
+	<link rel="stylesheet" href="css/jquery-ui.css" />
 	<script src="js/jquery-1.11.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
 	<script src="js/bootstrap.js"></script>
 </head>
 <body>
 	<%
 	Connection connection = null;
-	String mysql_url = application.getInitParameter("mysql_url");
-	String usuario = application.getInitParameter("mysql_usuario");
-	String pw = application.getInitParameter("mysql_pw");
+	InitCon init = new InitCon(application);
 	
 	try {
-		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
-		connection = msql.getConnection();
+		connection = init.getConnection();
 	%>
+	<div id="login-avatar" class="fixed">
+		<img src="img/Raw/Avatar/rawAvatar.png" alt="avatarImage" id="avatarLogin" />
+	</div>
+	<div id="login-box">
+		<div id="sliding-login-box"></div>
+	</div>
 	<div class="container-fluid">
 		<div class="row">
 			<div id="titulo" class="bloque text-center">
@@ -121,5 +128,6 @@
 		}
 	}
 	%>
+	<script src="js/myScript.js"></script>
 </body>
 </html>

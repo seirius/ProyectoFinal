@@ -34,6 +34,14 @@
     <servlet-name>CrearCuentaUsuario</servlet-name>
     <url-pattern>/CrearCuentaUsuario</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>IniciarSesion</servlet-name>
+    <servlet-class>main.servlets.IniciarSesion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IniciarSesion</servlet-name>
+    <url-pattern>/IniciarSesion</url-pattern>
+  </servlet-mapping>
   <context-param>
     <param-name>mysql_url</param-name>
     <param-value>jdbc:mysql://localhost/dark_sky?</param-value>

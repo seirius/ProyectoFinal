@@ -8,16 +8,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import main.bbdd_handlers.CuentasUsuario;
+import main.bbdd_objects.DatosCuenta;
 import main.connection.InitCon;
 import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 
-public class CrearCuentaUsuario extends HttpServlet {
+public class IniciarSesion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public CrearCuentaUsuario() {
+    public IniciarSesion() {
         super();
     }
 
@@ -30,30 +32,28 @@ public class CrearCuentaUsuario extends HttpServlet {
 		Connection connection = null;
 		InitCon init = new InitCon(getServletContext());
 		
-		String usuario = request.getParameter("usuario");
-		String pass = request.getParameter("pass");
-		String passR = request.getParameter("passR");
-		
-		if (!pass.equals(passR)) {
-			response.sendRedirect("htmls/crearCuentaUsuario.html");
-			return;
-		}
+		DatosCuenta cuenta = new DatosCuenta(request.getParameter("usuario"), request.getParameter("pass"));
 		
 		try {
 			connection = init.getConnection();
-			
 			CuentasUsuario cuentasUsuario = new CuentasUsuario(connection);
-			cuentasUsuario.ingresarCuentaUsuario(usuario, pass);
+			if (cuentasUsuario.exists(cuenta)) {
+				HttpSession session = request.getSession();
+				session.setAttribute("usuario", cuenta.usuario);
+				session.setMaxInactiveInterval(120);
+			}
+			
 			response.sendRedirect("htmls/login.html");
-		} catch (SQLException e) {
+			
+		} catch(SQLException e) {
 			e.printStackTrace();
-		} catch (ErrorNoLogico e) {
+		} catch(ErrorLogico e) {
 			e.printStackTrace();
-		} catch (ErrorLogico e) {
+		} catch(ErrorNoLogico e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (connection != null) connection.close();
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

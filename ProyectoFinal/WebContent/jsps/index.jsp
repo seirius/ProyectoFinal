@@ -13,16 +13,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<%
+	String rootPath = request.getContextPath();
+	%>
 	<title>Dark Sky - Principal</title>
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/testCSS.css">
-	<link rel="stylesheet" href="css/myCSS.css">
-	<link rel="stylesheet" href="css/myFonts.css" />
-	<link rel="stylesheet" href="css/jquery-ui.css" />
-	<script src="js/jquery-1.11.3.js"></script>
-	<script src="js/jquery-ui.js"></script>
-	<script src="js/bootstrap.js"></script>
+	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/testCSS.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/myCSS.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
+	<script src="<%= rootPath %>/js/jquery-1.11.3.js"></script>
+	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
+	<script src="<%= rootPath %>/js/bootstrap.js"></script>
 </head>
 <body>
 	<%
@@ -31,12 +34,46 @@
 	
 	try {
 		connection = init.getConnection();
+		HttpSession userSession = request.getSession();
+		String usuario = (String) userSession.getAttribute("usuario");
 	%>
 	<div id="login-avatar" class="fixed">
-		<img src="img/Raw/Avatar/rawAvatar.png" alt="avatarImage" id="avatarLogin" />
+		<img src="<%= rootPath %>/img/Raw/Avatar/rawAvatar.png" alt="avatarImage" id="avatarLogin" />
 	</div>
 	<div id="login-box">
-		<div id="sliding-login-box"></div>
+		<div id="sliding-login-box">
+			<div id="sliding-login-box-fondo"></div>
+			<%
+			if (usuario == null) {
+			%>
+			<form action="<%= rootPath %>/IniciarSesion?page=index" method="POST">
+				<div class="form-group">
+					<label for="usuarioID">Usuario</label>
+					<input type="text" name="usuario" class="form-control" id="usuarioID" />
+				</div>
+				<div class="form-group">
+					<label for="passID">Contraseña</label>
+					<input type="password" name="pass" class="form-control" id="passID" />
+				</div>
+				<div class="text-center">
+					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+				</div>
+			</form>
+			<%
+			} else {
+			%>
+			<form action="<%= rootPath %>/CerrarSesion?page=index" method="POST">
+				<div class="row">
+					<h3 class="text-center"><%= usuario %></h3>
+				</div>
+				<div class="row text-center">
+					<button type="submit" class="btn btn-primary">Cerrar Sesion</button>
+				</div>
+			</form>
+			<%
+			}
+			%>
+		</div>
 	</div>
 	<div class="container-fluid">
 		<div class="row">
@@ -58,10 +95,10 @@
 							<a href="#">Portada</a>
 						</li>
 						<li class="myActive">
-							<a href="#">Pagina Principal</a>
+							<a href="<%= rootPath %>/jsps/index.jsp">Pagina Principal</a>
 						</li>
 						<li>
-							<a href="#">Foro</a>
+							<a href="<%= rootPath %>/jsps/foro.jsp">Foro</a>
 						</li>
 					</ul>
 				</div>
@@ -128,6 +165,6 @@
 		}
 	}
 	%>
-	<script src="js/myScript.js"></script>
+	<script src="<%= rootPath %>/js/myScript.js"></script>
 </body>
 </html>

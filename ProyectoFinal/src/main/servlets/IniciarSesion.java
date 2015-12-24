@@ -33,6 +33,7 @@ public class IniciarSesion extends HttpServlet {
 		InitCon init = new InitCon(getServletContext());
 		
 		DatosCuenta cuenta = new DatosCuenta(request.getParameter("usuario"), request.getParameter("pass"));
+		String page = request.getParameter("page");
 		
 		try {
 			connection = init.getConnection();
@@ -43,12 +44,12 @@ public class IniciarSesion extends HttpServlet {
 				session.setMaxInactiveInterval(120);
 			}
 			
-			response.sendRedirect("htmls/login.html");
+			response.sendRedirect(request.getContextPath() + "/jsps/" + page + ".jsp");
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} catch(ErrorLogico e) {
-			e.printStackTrace();
+			response.sendRedirect(request.getContextPath() + "/jsps/" + page + ".jsp");
 		} catch(ErrorNoLogico e) {
 			e.printStackTrace();
 		} finally {

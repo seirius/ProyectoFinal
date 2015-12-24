@@ -1,100 +1,160 @@
-<%@page import="main.util.UtilDates"%>
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="bbdd.MySQLConnection"%>
-<%@page import="main.util.ErrorNoLogico"%>
-<%@page import="java.sql.SQLException"%>
+<%@page import="main.connection.InitCon"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Foro de Dark Sky</title>
+	<%
+	String rootPath = request.getContextPath();
+	%>
+	<title>Dark Sky - Foro</title>
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
-	<link rel="stylesheet" href="../css/bootstrap.css">
-	<link rel="stylesheet" href="../css/myCSS.css">
-	<link rel="stylesheet" href="../css/testCSS.css">
-	<link rel="stylesheet" href="../css/myFonts.css" />
-	<script src="../js/jquery-1.11.3.js"></script>
-	<script src="../js/bootstrap.js"></script>
+	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/testCSS.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/myCSS.css">
+	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
+	<script src="<%= rootPath %>/js/jquery-1.11.3.js"></script>
+	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
+	<script src="<%= rootPath %>/js/bootstrap.js"></script>
 </head>
 <body>
 	<%
+	HttpSession userSession = request.getSession();
+	String usuario = (String) userSession.getAttribute("usuario");
+	
 	Connection connection = null;
-	String mysql_url = application.getInitParameter("mysql_url");
-	String usuario = application.getInitParameter("mysql_usuario");
-	String pw = application.getInitParameter("mysql_pw");
 	
 	try {
-		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
-		connection = msql.getConnection();
+		InitCon init = new InitCon(application);
+		connection = init.getConnection();
+		PostInfo postInfo = new PostInfo(connection);
+		ResultSet posts = postInfo.getAllPosts();
+		
+	
 	%>
-	<div class="container">
+	<div id="login-avatar" class="fixed">
+		<img src="<%= rootPath %>/img/Raw/Avatar/rawAvatar.png" alt="avatarImage" id="avatarLogin" />
+	</div>
+	<div id="login-box">
+		<div id="sliding-login-box">
+			<div id="sliding-login-box-fondo"></div>
+			<%
+			if (usuario == null) {
+			%>
+			<form action="<%= rootPath %>/IniciarSesion?page=foro" method="POST">
+				<div class="form-group">
+					<label for="usuarioID">Usuario</label>
+					<input type="text" name="usuario" class="form-control" id="usuarioID" />
+				</div>
+				<div class="form-group">
+					<label for="passID">Contraseña</label>
+					<input type="password" name="pass" class="form-control" id="passID" />
+				</div>
+				<div class="text-center">
+					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+				</div>
+			</form>
+			<%
+			} else {
+			%>
+			<form action="<%= rootPath %>/CerrarSesion?page=foro" method="POST">
+				<div class="row">
+					<h3 class="text-center"><%= usuario %></h3>
+				</div>
+				<div class="row text-center">
+					<button type="submit" class="btn btn-primary">Cerrar Sesion</button>
+				</div>
+			</form>
+			<%
+			}
+			%>
+		</div>
+	</div>
+	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
-				<h3 class="text-center">Foro</h3>
+			<div id="titulo" class="bloque text-center">
+				<span>DARK </span>
+				<span>SKY</span>
+			</div>
+			<div class="navbar navbar-inverse">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="#">Portada</a>
+						</li>
+						<li>
+							<a href="<%= rootPath %>/jsps/index.jsp">Pagina Principal</a>
+						</li>
+						<li class="myActive">
+							<a href="<%= rootPath %>/jsps/foro.jsp">Foro</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
+	</div>
+	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th class="col-lg-6">Titulo</th>
-							<th class="col-lg-6">Fecha de creacion</th>
-						</tr>
-					</thead>
-					<tbody>
-					<%
-					PostInfo postInfo = new PostInfo(connection);
-					ResultSet posts = postInfo.getAllPosts();
-					boolean hay = posts.next();
-					while(hay) {
-						int id = posts.getInt("ID");
-						String titulo = posts.getString("TITULO");
-						String fecha = UtilDates.timestampToString(posts.getTimestamp("FECHA_CREACION"), "dd/MM/yy HH:mm:ss");
-					%>
-						<tr>
-							<th><a href="post.jsp?id=<%= id %>"><%= titulo %></a></th>
-							<th><%= fecha %></th>
-						</tr>
-					<%
-						hay = posts.next();
-					}
-					%>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="row topSpace-3">
-			<div class="col-lg-8 col-lg-offset-2">
-				<div class="cajaComentario">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate sint quod architecto neque quae placeat cumque asperiores saepe
-						maiores hic id quam ratione tempora ipsum temporibus est quos totam laborum?</p>
+			<div id="fondo">
+				<div class="container">
+					<div class="row">
+						<div id="contenido">
+							<div id="contenidoFondo"></div>
+							<div id="contenedorForoLista">
+								<div id="contenedorForoListaFondo"></div>
+								<div id="idLista">
+									<div class="table-condensed">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Titulo</th>
+													<th>Fecha de creacion</th>
+												</tr>
+											</thead>
+											<tbody>
+												<%
+												boolean hay = posts.next();
+												while(hay) {
+													
+												%>
+												<tr>
+													<td><a href="#"><%= posts.getString("TITULO") %></a></td>
+													<td><%= posts.getTimestamp("FECHA_CREACION") %></td>
+												</tr>
+												<%
+													hay = posts.next();
+												}
+												%>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<%
 	} catch(SQLException e) {
-		%>
-		<h2><%= e.getMessage() %></h2>
-		<%
-	} catch(ErrorNoLogico e) {
-		%>
-		<h2><%= e.getMessage() %></h2>
-		<%
+		e.printStackTrace();
 	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-			<h2><%= e.getMessage() %></h2>
-			<%	
-		}
+		if (connection != null) connection.close();
 	}
 	%>
+	<script src="<%= rootPath %>/js/myScript.js"></script>
 </body>
 </html>

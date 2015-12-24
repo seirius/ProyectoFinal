@@ -42,6 +42,14 @@
     <servlet-name>IniciarSesion</servlet-name>
     <url-pattern>/IniciarSesion</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>CerrarSesion</servlet-name>
+    <servlet-class>main.servlets.CerrarSesion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CerrarSesion</servlet-name>
+    <url-pattern>/CerrarSesion</url-pattern>
+  </servlet-mapping>
   <context-param>
     <param-name>mysql_url</param-name>
     <param-value>jdbc:mysql://localhost/dark_sky?</param-value>

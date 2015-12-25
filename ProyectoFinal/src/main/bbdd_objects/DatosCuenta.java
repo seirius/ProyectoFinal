@@ -4,6 +4,7 @@ public class DatosCuenta {
 
 	public String usuario;
 	public String pass;
+	public String avatarURL;
 	
 	public DatosCuenta(String usuario, String pass)	{
 		this.usuario = usuario;

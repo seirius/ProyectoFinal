@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import main.bbdd_handlers.CuentasUsuario;
+import main.bbdd_handlers.UsuarioInfo;
 import main.bbdd_objects.DatosCuenta;
 import main.connection.InitCon;
 import main.util.ErrorLogico;
@@ -39,8 +40,11 @@ public class IniciarSesion extends HttpServlet {
 			connection = init.getConnection();
 			CuentasUsuario cuentasUsuario = new CuentasUsuario(connection);
 			if (cuentasUsuario.exists(cuenta)) {
+				UsuarioInfo usuarioInfo = new UsuarioInfo(connection);
+				String avatarURL = usuarioInfo.selectAvatarURL(cuenta.usuario);
 				HttpSession session = request.getSession();
 				session.setAttribute("usuario", cuenta.usuario);
+				session.setAttribute("avatarURL", avatarURL);
 				session.setMaxInactiveInterval(120);
 			}
 			

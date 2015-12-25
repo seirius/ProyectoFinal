@@ -16,11 +16,9 @@ $("#imagenAvatar").click(function () {
 	var cajaImagen = $("#caja-imagen-avatar");
 	
 	if (cajaImagen.css("right") === "10px") {
-		cajaImagen.animate({right: "+=390px"});
-		cajaImagen.animate({width: "70px"});
+		cajaImagen.animate({right: "+=410px"});
 	}
 	else {
 		cajaImagen.animate({right: "10px"});
-		cajaImagen.animate({width: "50px"});
 	}
 });

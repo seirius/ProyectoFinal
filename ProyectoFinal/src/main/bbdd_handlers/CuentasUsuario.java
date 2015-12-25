@@ -33,6 +33,9 @@ public class CuentasUsuario {
 			orden.setString(1, usuario);
 			orden.setString(2, pass);
 			orden.executeUpdate();
+			
+			UsuarioInfo usuarioInfo = new UsuarioInfo(connection);
+			usuarioInfo.insertar(usuario, "/img/Raw/Avatar/rawAvatar.png");
 		} catch(SQLException e) {
 			if (e.getErrorCode() == 1062) throw new ErrorLogico(USER_EXISTS);
 			throw new ErrorNoLogico(e.getMessage());

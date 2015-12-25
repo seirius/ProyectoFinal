@@ -2,10 +2,19 @@
 
 @font-face {
     font-family: titlePixelFont;
-    src: url('../fonts/origap__.ttf');
+    src: url("/ProyectoFinal/fonts/origap__.ttf");
 }
 
 @font-face {
     font-family: menuPixelFont;
-    src: url('../fonts/ice_pixel-7.ttf');
+    src: url("/ProyectoFinal/fonts/ice_pixel-7.ttf");
+}
+
+@font-face {
+    font-family: advancedPixel;
+    src: url("/ProyectoFinal/fonts/advanced_pixel-7.ttf");
+}
+
+.advanced-pixel-font {
+	font-family: advancedPixel;
 }

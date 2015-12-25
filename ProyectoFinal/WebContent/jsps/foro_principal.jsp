@@ -1,7 +1,9 @@
+<%@page import="main.util.UtilDates"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="main.bbdd_handlers.PostInfo"%>
+<%@page import="java.sql.SQLException"%>
 <%@page import="main.connection.InitCon"%>
 <%@page import="java.sql.Connection"%>
-<%@page import="main.util.ErrorNoLogico"%>
-<%@page import="java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,14 +12,14 @@
 	<%
 	String rootPath = request.getContextPath();
 	%>
-	<title>Dark Sky - Pagina Principal</title>
+	<title>Dark Sky - Foro</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/principalCSS.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/foroCSS.css" />
 	<script src="<%= rootPath %>/js/jquery.js"></script>
 	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
 	<script src="<%= rootPath %>/js/bootstrap.js"></script>
@@ -31,10 +33,12 @@
 		connection = init.getConnection();
 		HttpSession userSession = request.getSession();
 		String usuario = (String) userSession.getAttribute("usuario");
+		String avatarURL = (String) userSession.getAttribute("avatarURL");
+		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
 	%>
 	<!-- CAJA-IMAGEN-AVATAR -->
 	<div id="caja-imagen-avatar" class="position-fixed">
-		<img src="<%= rootPath %>/img/Raw/Avatar/rawAvatar.png" alt="imagenAvatar" id="imagenAvatar" />
+		<img src="<%= rootPath %><%= avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
 	</div>
 	
 	<div class="position-fixed" id="caja-login">
@@ -43,7 +47,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=principal" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=foro_principal" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -59,7 +63,7 @@
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=principal" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=foro_principal" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -90,10 +94,10 @@
 				</div>
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li class="myActive">
+						<li>
 							<a href="<%= rootPath %>/jsps/principal.jsp">Pagina Principal</a>
 						</li>
-						<li>
+						<li class="myActive">
 							<a href="<%= rootPath %>/jsps/foro_principal.jsp">Foro</a>
 						</li>
 					</ul>
@@ -107,6 +111,25 @@
 	<!-- CAJA CONTENIDO -->
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
+			<div class="extend-to-parent position-relative" id="caja-contenido-source">
+			
+			<%
+			PostInfo postInfo = new PostInfo(connection);
+			ResultSet posts = postInfo.getAllPosts();
+			boolean hayPosts = posts.next();
+			while(hayPosts) {
+				
+				%>
+				<div class="panel panel-default">
+					<div class="panel-heading advanced-pixel-font post-titulo"><%= posts.getString("TITULO") %></div>
+					<div class="panel-body advanced-pixel-font post-body"><%= UtilDates.timestampToString(posts.getTimestamp("FECHA_CREACION"), "dd/MM/yy HH:mm:ss") %></div>
+				</div>
+				<%
+				
+				hayPosts = posts.next();
+			}
+			%>
+			</div>
 		</div>
 	</div>
 	<%
@@ -127,11 +150,3 @@
 	<script src="<%= rootPath %>/js/generalScript.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-

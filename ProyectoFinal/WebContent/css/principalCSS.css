@@ -1,0 +1,15 @@
+@CHARSET "ISO-8859-1";
+
+/***CAJA-CONTENIDO***/
+
+#caja-contenido {
+	height: 900px;
+	border: 32px solid transparent;
+	border-image: url("/ProyectoFinal/img/Tests/grassBorders.png") 30% round;
+}
+
+#caja-contenido-fondo {
+	background-image: url("/ProyectoFinal/img/Tests/grassBG.png");
+}
+
+/************************************************************************************/

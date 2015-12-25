@@ -1,0 +1,129 @@
+@CHARSET "ISO-8859-1";
+
+
+
+/***CABECERA + MENU***/
+#cabecera {
+	background-image: url("/ProyectoFinal/img/clouds_v2.png");/
+	background-size: cover;
+	font-family: titlePixelFont;
+	font-size: 6rem;
+}
+
+#cabecera > span:first-child {
+	color: white;
+}
+
+#cabecera > span:last-child {
+	color: dodgerblue;
+}
+
+.navbar-inverse {
+	margin: 0;
+	border-radius: 0;
+	background-image: url("../img/menuBar.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	box-shadow: 0px 5px 20px black;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	font-family: menuPixelfont;
+	font-size: 3rem;
+	color: rgb(244, 225, 185);
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+	color: rgb(50, 128, 246);
+}
+
+.myActive {
+	box-shadow: inset 0 0 50px rgb(47, 34, 54);
+	border: 2px solid black;
+	margin: -2px 4px -2px -2px;
+}
+
+/************************************************************************************/
+
+/***CAJA-GENERAL***/
+#caja-general {
+	background-image: url("/ProyectoFinal/img/blocks_bg.png");
+	padding-bottom: 3rem;
+}
+
+/************************************************************************************/
+
+/***CAJA-LOGIN***/
+
+#caja-imagen-avatar {
+	width: 50px;
+	right: 10px;
+	top: 150px;
+	z-index: 10;
+}
+
+#imagenAvatar {
+	width: 100%;
+	cursor: pointer;
+}
+
+#caja-login {
+	width: 400px;
+	right: 0;
+	top: 150px;
+	z-index: -1;
+}
+
+#caja-login-sliding {
+	border: 32px solid transparent;
+	border-image: url("/ProyectoFinal/img/Tests/blackRock.png") 30% round;
+	overflow: hidden;
+	display: none;
+	color: white;
+}
+
+#caja-login-sliding-fondo {
+	background-image: url("/ProyectoFinal/img/Tests/blackRockBG.png");
+	z-index: -1;
+}
+
+/************************************************************************************/
+
+/***Utilities***/
+
+.margin-top-1 {margin-top: 1rem;}
+.margin-top-2 {margin-top: 2rem;}
+.margin-top-3 {margin-top: 3rem;}
+.margin-top-4 {margin-top: 4rem;}
+.margin-bot-1 {margin-bottom: 1rem;}
+.margin-bot-2 {margin-bottom: 2rem;}
+.margin-bot-3 {margin-bottom: 3rem;}
+.margin-bot-4 {margin-bottom: 4rem;}
+.padding-1 {padding: 1rem;}
+.padding-2 {padding: 2rem;}
+.padding-3 {padding: 3rem;}
+.padding-4 {padding: 4rem;}
+.extend-to-parent {width: 100%; height: 100%;}
+.position-relative {position: relative;}
+.position-absolute {position: absolute;}
+.position-fixed {position: fixed;}
+.no-padding {padding: 0;}
+
+/************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

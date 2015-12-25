@@ -14,9 +14,8 @@
 
 #titulo {
 	height: 125px;
-	background-image: url("../img/clouds.png");
-	background-position: cover;
-	background-repeat: no-repeat;
+	background-image: url("/ProyectoFinal/img/clouds.png");
+	background-size: cover;
 	color: white;
 	font-size: 6rem;
 	font-family: titlePixelFont;

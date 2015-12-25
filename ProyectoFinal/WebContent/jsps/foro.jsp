@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="<%= rootPath %>/css/myCSS.css">
 	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
-	<script src="<%= rootPath %>/js/jquery-1.11.3.js"></script>
+	<script src="<%= rootPath %>/js/jquery.js"></script>
 	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
 	<script src="<%= rootPath %>/js/bootstrap.js"></script>
 </head>

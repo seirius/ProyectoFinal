@@ -1,1 +1,14 @@
 @CHARSET "ISO-8859-1";
+
+/***POST TITULO/BODY/COMMENT ***/
+.panel-default > .post-titulo {
+		
+}
+
+.panel-default > .post-body {
+		
+}
+
+.panel-default > .post-comment {
+	background-color: #9ba7ce;
+}

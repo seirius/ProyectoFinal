@@ -123,17 +123,21 @@
 				<div class="panel panel-default">
 					<div class="panel-heading post-titulo"><%= post.titulo %></div>
 					<div class="panel-body post-body"><%= post.texto %></div>
+				</div>
 					<% 
 					boolean hayComms = comments.next();
 					while (hayComms) {
-						
 					%>
-					<div class="panel-body post-body"><%= comments.getString("TEXTO") %></div>
+				<div class="panel panel-default margin-top-2">
+					<div class="panel-body post-comment">
+						<div class="col-lg-8"><%= comments.getString("TEXTO") %></div>
+						<div class="col-lg-4"><%= UtilDates.timestampToString(comments.getTimestamp("FECHA_CREACION"), "dd-MM-yy HH:mm:ss") %></div>
+					</div>
+				</div>
 					<%
 						hayComms = comments.next();
 					}
 					%>
-				</div>
 			</div>
 		</div>
 	</div>

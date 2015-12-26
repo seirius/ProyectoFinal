@@ -12,7 +12,7 @@
 	<%
 	String rootPath = request.getContextPath();
 	%>
-	<title>Dark Sky - Foro</title>
+	<title>Dark Sky - Crear Entrada</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
 	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
@@ -48,7 +48,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=foro_principal" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=crearPost" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -64,7 +64,7 @@
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=foro_principal" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=crearPost" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -113,7 +113,19 @@
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
 			<div class="extend-to-parent position-relative" id="caja-contenido-source">
-				<button>Prueba boton</button>
+				<form action="<%= rootPath %>/CrearPost" method="POST">
+					<div class="col-lg-12 form-group">
+						<label for="tituloPost">Titulo</label>
+						<input type="text" name="tituloPost" class="form-control" id="inputTitulo" />
+					</div>
+					<div class="col-lg-12">
+						<label for="textoPost">Texto</label>
+						<textarea name="textoPost" class="form-control" id="textoPost" maxLength = "1000" rows="20"></textarea>
+					</div>
+					<div class="col-lg-4 col-lg-offset-4 margin-top-3 margin-bot-3">
+						<button type="submit" class="btn-pixel btn-block">Publicar</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

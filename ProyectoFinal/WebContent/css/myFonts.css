@@ -15,6 +15,30 @@
     src: url("/ProyectoFinal/fonts/advanced_pixel-7.ttf");
 }
 
-.advanced-pixel-font {
-	font-family: advancedPixel;
+@font-face {
+    font-family: squarePixel;
+    src: url("/ProyectoFinal/fonts/square_pixel-7.ttf");
 }
+
+@font-face {
+    font-family: backToPixel;
+    src: url("/ProyectoFinal/fonts/BACKTO1982.TTF");
+}
+
+@font-face {
+    font-family: droidPixel;
+    src: url("/ProyectoFinal/fonts/droid.ttf");
+}
+
+@font-face {
+    font-family: booPixel;
+    src: url("/ProyectoFinal/fonts/boo.ttf");
+}
+
+@font-face {
+    font-family: casalePixel;
+    src: url("/ProyectoFinal/fonts/casale.ttf");
+}
+
+.advanced-pixel-font {font-family: advancedPixel;}
+.square-pixel-font {font-family: squarePixel;}

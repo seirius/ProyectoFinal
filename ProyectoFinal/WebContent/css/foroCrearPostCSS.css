@@ -1,1 +1,13 @@
 @CHARSET "ISO-8859-1";
+
+#caja-contenido-source {
+	color: white;
+}
+
+#inputTitulo {
+	font-weight: bold;
+}
+
+#textoPost {
+	resize: none;
+}

@@ -1,10 +1,10 @@
-<%@page import="java.sql.ResultSet"%>
 <%@page import="main.bbdd_handlers.PostComments"%>
 <%@page import="main.bbdd_objects.Post"%>
+<%@page import="main.util.UtilDates"%>
+<%@page import="java.sql.ResultSet"%>
 <%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="main.util.ErrorNoLogico"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="bbdd.MySQLConnection"%>
+<%@page import="main.connection.InitCon"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -12,95 +12,137 @@
 <html>
 <head>
 	<%
+	String rootPath = request.getContextPath();
+	int idPost = Integer.parseInt(request.getParameter("idPost"));
 	Connection connection = null;
-	String mysql_url = application.getInitParameter("mysql_url");
-	String usuario = application.getInitParameter("mysql_usuario");
-	String pw = application.getInitParameter("mysql_pw");
+	InitCon init = new InitCon(application);
 	
 	try {
-		MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
-		connection = msql.getConnection();
+		connection = init.getConnection();
+		HttpSession userSession = request.getSession();
+		String usuario = (String) userSession.getAttribute("usuario");
+		String avatarURL = (String) userSession.getAttribute("avatarURL");
+		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
 		
 		PostInfo postInfo = new PostInfo(connection);
-		int id = Integer.parseInt(request.getParameter("id"));
-		Post post = postInfo.getSinglePost(id);
+		Post post = postInfo.getSinglePost(idPost);
 		
-		PostComments postComments = new PostComments(connection);
-		ResultSet comments = postComments.getCommentsByPostID(id);
-		boolean hay = comments.next();
+		PostComments postComms = new PostComments(connection);
+		ResultSet comments = postComms.getCommentsByPostID(idPost);
 	%>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title><%= post.titulo %></title>
+	<title>Dark Sky - <%= post.titulo %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale = 1" />
-	<link rel="stylesheet" href="../css/bootstrap.css">
-	<link rel="stylesheet" href="../css/myCSS.css">
-	<link rel="stylesheet" href="../css/testCSS.css">
-	<link rel="stylesheet" href="../css/myFonts.css" />
-	<script src="../js/jquery-1.11.3.js"></script>
-	<script src="../js/bootstrap.js"></script>
+	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/foroCSS.css" />
+	<link rel="stylesheet" href="<%= rootPath %>/css/postCSS.css" />
+	<script src="<%= rootPath %>/js/jquery.js"></script>
+	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
+	<script src="<%= rootPath %>/js/bootstrap.js"></script>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<h2 class="text-center"><%= post.titulo %></h2>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body"><%= post.texto %></div>
+	<!-- CAJA-IMAGEN-AVATAR -->
+	<div id="caja-imagen-avatar" class="position-fixed">
+		<img src="<%= rootPath %><%= avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
+	</div>
+	
+	<div class="position-fixed" id="caja-login">
+		<div class="extend-to-parent position-relative" id="caja-login-sliding">
+			<div class="extend-to-parent position-absolute" id="caja-login-sliding-fondo"></div>
+			<%
+			if (usuario == null) {
+			%>
+			<form action="<%= rootPath %>/IniciarSesion?page=foro_principal" method="POST">
+				<div class="form-group">
+					<label for="usuarioID">Usuario</label>
+					<input type="text" name="usuario" class="form-control" id="usuarioID" />
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
+				<div class="form-group">
+					<label for="passID">Contraseña</label>
+					<input type="password" name="pass" class="form-control" id="passID" />
+				</div>
+				<div class="text-center">
+					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+				</div>
+			</form>
+			<%
+			} else {
+			%>
+			<form action="<%= rootPath %>/CerrarSesion?page=foro_principal" method="POST">
 				<div class="row">
-					<div class="col-lg-2 col-lg-offset-10">
-						<a href="#" data-toggle="collapse" data-target="#commentDiv">Comentar</a>
-					</div>
+					<h3 class="text-center"><%= usuario %></h3>
 				</div>
-				
-				<div id="commentDiv" class="collapse">
-					<form action="../PublicarComentario?idPost=<%= id %>" method="POST">
-						<div class="form-group">
-							<textarea name="comentario" id="comentario" maxLength="400" rows="10" class="form-control"></textarea>
-						</div>
-						<div class="row">
-							<div class="col-lg-4 col-lg-offset-8">
-								<button type="submit" id="botonPublicComentario" class="btn btn-primary btn-block">Publicar comentario</button>
-							</div>
-						</div>
-					</form>
+				<div class="row text-center">
+					<button type="submit" class="btn btn-primary">Cerrar Sesion</button>
+				</div>
+			</form>
+			<%
+			}
+			%>
+		</div>
+	</div>
+	
+	<!-- CABECERA + MENU -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="text-center" id="cabecera">
+				<span>DARK </span>
+				<span>SKY</span>
+			</div>
+			<div class="navbar navbar-inverse">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="<%= rootPath %>/jsps/principal.jsp">Pagina Principal</a>
+						</li>
+						<li class="myActive">
+							<a href="<%= rootPath %>/jsps/foro_principal.jsp">Foro</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
-		<%
-		while (hay) {
-			String commentText = comments.getString("TEXTO");
-		%>
-		<div class="row topSpace-1">
-			<div class="col-lg-8 col-lg-offset-2">
+	</div>
+	<!-- CAJA GENERAL -->
+	<div class="container-fluid" id="caja-general">
+	
+	<!-- CAJA CONTENIDO -->
+		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
+			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
+			<div class="extend-to-parent position-relative" id="caja-contenido-source">
 				<div class="panel panel-default">
-					<div class="panel-body"><%= commentText %></div>
+					<div class="panel-heading post-titulo"><%= post.titulo %></div>
+					<div class="panel-body post-body"><%= post.texto %></div>
+					<% 
+					boolean hayComms = comments.next();
+					while (hayComms) {
+						
+					%>
+					<div class="panel-body post-body"><%= comments.getString("TEXTO") %></div>
+					<%
+						hayComms = comments.next();
+					}
+					%>
 				</div>
 			</div>
 		</div>
-		<%
-			hay = comments.next();
-		}
-		%>
 	</div>
 	<%
 	} catch(SQLException e) {
 		%>
 		<h2><%= e.getMessage() %></h2>
 		<%
-	} /*catch(ErrorNoLogico e) {
-		%>
-		<h2><%= e.getMessage() %></h2>
-		<%
-	}*/ finally {
+	} finally {
 		try {
 			if (connection != null) connection.close();
 		} catch(SQLException e) {
@@ -110,5 +152,6 @@
 		}
 	}
 	%>
+	<script src="<%= rootPath %>/js/generalScript.js"></script>
 </body>
 </html>

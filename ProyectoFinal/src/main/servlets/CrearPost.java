@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bbdd.MySQLConnection;
 import main.bbdd_handlers.PostInfo;
+import main.connection.InitCon;
 import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 
@@ -28,29 +28,27 @@ public class CrearPost extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Connection connection = null;
 		
-		String mysql_url = getServletContext().getInitParameter("mysql_url");
-		String usuario = getServletContext().getInitParameter("mysql_usuario");
-		String pw = getServletContext().getInitParameter("mysql_pw");
-		
 		String titulo = request.getParameter("tituloPost");
-		String texto = request.getParameter("postText");
+		String texto = request.getParameter("textoPost");
 		
 		try {
-			MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
-			connection = msql.getConnection();
+			InitCon init = new InitCon(getServletContext());
+			connection = init.getConnection();
 			PostInfo post = new PostInfo(connection);
 			int idPost = post.createPost(titulo, texto, null, null);
 			request.setAttribute("idPost", new Integer(idPost));
-			getServletContext().getRequestDispatcher("/jsps/postAfterCreate.jsp").forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/jsps/foro_principal.jsp");
 		} catch(SQLException e) {
 			//Temporal <- Importante
 			e.printStackTrace();
 		} catch(ErrorNoLogico e) {
 			//Temporal <- Importante
 			e.printStackTrace();
+			response.sendRedirect(request.getContextPath() + "/jsps/crearPost.jsp");
 		} catch(ErrorLogico e) {
 			//Temporal <- Importante
 			e.printStackTrace();
+			response.sendRedirect(request.getContextPath() + "/jsps/crearPost.jsp");
 		} finally {
 			try {
 				if (connection != null) connection.close();

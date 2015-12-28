@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bbdd.MySQLConnection;
 import main.bbdd_handlers.PostComments;
+import main.connection.InitCon;
+import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 
 public class PublicarComentario extends HttpServlet {
@@ -29,17 +30,17 @@ public class PublicarComentario extends HttpServlet {
 		
 		Connection connection = null;
 		
-		String mysql_url = getServletContext().getInitParameter("mysql_url");
-		String usuario = getServletContext().getInitParameter("mysql_usuario");
-		String pw = getServletContext().getInitParameter("mysql_pw");
+		InitCon init = new InitCon(getServletContext());
+		String usuario = (String) request.getSession().getAttribute("usuario");
 		
 		try {
-			MySQLConnection msql = new MySQLConnection(mysql_url, usuario, pw);
-			connection = msql.getConnection();
+			connection = init.getConnection();
 			PostComments postComments = new PostComments(connection);
-			postComments.comment(idPost, request.getParameter("comentario"));
-			response.sendRedirect("jsps/post.jsp?id=" + idPost);
+			postComments.comment(idPost, request.getParameter("textareaComentarioPost"), usuario);
+			response.sendRedirect("jsps/post.jsp?idPost=" + idPost);
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ErrorLogico e) {
 			e.printStackTrace();
 		} catch (ErrorNoLogico e) {
 			e.printStackTrace();

@@ -48,7 +48,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=crearPost" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=crearPost.jsp" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -58,13 +58,16 @@
 					<input type="password" name="pass" class="form-control" id="passID" />
 				</div>
 				<div class="text-center">
-					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+					<button type="submit" class="btn-pixel">Iniciar Sesion</button>
+				</div>
+				<div class="margin-top-2">
+					<a href="<%= rootPath %>/jsps/crearCuentaUsuario.jsp">Crear cuenta</a>
 				</div>
 			</form>
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=crearPost" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=crearPost.jsp" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -113,6 +116,9 @@
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
 			<div class="extend-to-parent position-relative" id="caja-contenido-source">
+				<%
+				if (usuario != null) {
+				%>
 				<form action="<%= rootPath %>/CrearPost" method="POST">
 					<div class="col-lg-12 form-group">
 						<label for="tituloPost">Titulo</label>
@@ -126,6 +132,14 @@
 						<button type="submit" class="btn-pixel btn-block">Publicar</button>
 					</div>
 				</form>
+				<%
+				} else {
+					
+				%>
+				<h2 class="text-center">Tienes que iniciar sesion para crear una nueva entrada!</h2>
+				<%
+				}
+				%>
 			</div>
 		</div>
 	</div>

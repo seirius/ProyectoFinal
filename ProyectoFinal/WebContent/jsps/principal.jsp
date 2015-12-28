@@ -43,7 +43,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=principal" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=principal.jsp" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -53,13 +53,16 @@
 					<input type="password" name="pass" class="form-control" id="passID" />
 				</div>
 				<div class="text-center">
-					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+					<button type="submit" class="btn-pixel">Iniciar Sesion</button>
+				</div>
+				<div class="margin-top-2">
+					<a href="<%= rootPath %>/jsps/crearCuentaUsuario.jsp">Crear cuenta</a>
 				</div>
 			</form>
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=principal" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=principal.jsp" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -74,7 +77,7 @@
 	</div>
 	
 	<!-- CABECERA + MENU -->
-	<div class="container-fluid">
+	<div class="container-fluid" id="cabecera">
 		<div class="row">
 			<div class="text-center" id="cabecera">
 				<span>DARK </span>

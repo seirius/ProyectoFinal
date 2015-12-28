@@ -35,7 +35,7 @@ public class CrearCuentaUsuario extends HttpServlet {
 		String passR = request.getParameter("passR");
 		
 		if (!pass.equals(passR)) {
-			response.sendRedirect("htmls/crearCuentaUsuario.html");
+			response.sendRedirect(request.getContextPath() + "/jsps/crearCuentaUsuario.jsp");
 			return;
 		}
 		
@@ -44,7 +44,7 @@ public class CrearCuentaUsuario extends HttpServlet {
 			
 			CuentasUsuario cuentasUsuario = new CuentasUsuario(connection);
 			cuentasUsuario.ingresarCuentaUsuario(usuario, pass);
-			response.sendRedirect("htmls/login.html");
+			response.sendRedirect(request.getContextPath() + "/jsps/principal.jsp");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ErrorNoLogico e) {

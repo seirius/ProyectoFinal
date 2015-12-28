@@ -12,7 +12,6 @@
 <head>
 <%
 	String rootPath = request.getContextPath();
-	int idPost = Integer.parseInt(request.getParameter("idPost"));
 	Connection connection = null;
 	InitCon init = new InitCon(application);
 	
@@ -22,23 +21,15 @@
 		String usuario = (String) userSession.getAttribute("usuario");
 		String avatarURL = (String) userSession.getAttribute("avatarURL");
 		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
-		
-		PostInfo postInfo = new PostInfo(connection);
-		Post post = postInfo.getSinglePost(idPost);
-		
-		PostComments postComms = new PostComments(connection);
-		ResultSet comments = postComms.getCommentsByPostID(idPost);
 	%>
-<title>Dark Sky -
-	<%= post.titulo %></title>
+<title>Dark Sky - Crear Cuenta</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale = 1" />
 <link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
 <link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
 <link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
 <link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/foroCSS.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/postCSS.css" />
+<link rel="stylesheet" href="<%= rootPath %>/css/crearCuentaCSS.css" />
 <script src="<%= rootPath %>/js/jquery.js"></script>
 <script src="<%= rootPath %>/js/jquery-ui.js"></script>
 <script src="<%= rootPath %>/js/bootstrap.js"></script>
@@ -55,7 +46,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=post.jsp?idPost=<%= idPost %>" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=crearCuentaUsuario.jsp" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -74,7 +65,7 @@
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=post.jsp?idPost=<%= idPost %>" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=crearCuentaUsuario.jsp" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -123,57 +114,27 @@
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
 			<div class="extend-to-parent position-relative" id="caja-contenido-source">
-
-				<!-- POST TITULO/TEXTO -->
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						<div class="panel-heading post-titulo"><%= post.titulo %> by <%= post.autor %></div>
-						<div class="panel-body post-body"><%= post.texto %></div>
-					</div>
-				</div>
-
-				<!-- POST BOTON/COMENTAR -->
-				
-				<%
-				if (usuario != null) {
-				%>
-				<div class="col-lg-offset-2 col-lg-8">
-					<button class="btn-pixel btn-block" id="botonComentar" data-toggle="collapse" data-target="#cajaComentarPost">Comentar</button>
-				</div>
-				<%
-				}
-				%>
-
-				<div class="collapse" id="cajaComentarPost">
-					<form action="<%= rootPath %>/PublicarComentario?idPost=<%= idPost %>" method="POST">
-						<div class="margin-top-2 col-lg-offset-2 col-lg-8">
-							<textarea class="form-control" name="textareaComentarioPost" id="textareaComentarioPost" maxLength="400" rows="8"></textarea>
-						</div>
-						<div class="col-lg-4 col-lg-offset-4 margin-top-2">
-							<button type="submit" class="btn-pixel btn-block btn-pixel-blue" id="botonPublicarComentario">Publicar</button>
-						</div>
-					</form>
-				</div>
-
-				<!-- POST COMENTARIOS DEL POST -->
-				<% 
-					boolean hayComms = comments.next();
-					while (hayComms) {
-					%>
-				<div class="col-lg-12">
-					<div class="panel panel-default margin-top-2">
-						<div class="panel-body post-comment">
-							<div class="col-lg-8"><%= comments.getString("TEXTO") %></div>
-							<div class="col-lg-4">
-								<%= UtilDates.timestampToString(comments.getTimestamp("FECHA_CREACION"), "dd-MM-yy HH:mm:ss") %> || Publicado por <%= comments.getString("AUTOR") %>
+				<form action="<%= rootPath %>/CrearCuentaUsuario" method="POST">
+					<div class="row topSpace-3">
+						<div class="col-lg-6 col-lg-offset-3">
+							<div class="form-group text-center">
+								<label for="usuarioID">Nuevo usuario</label>
+								<input type="text" name="usuario" id="usuarioID" class="form-control " />
+							</div>
+							<div class="form-group text-center">
+								<label for="passID">Nueva contraseña</label>
+								<input type="password" name="pass" id="passID" class="form-control" />
+							</div>
+							<div class="form-group text-center">
+								<label for="passIDR">Repetir contraseña</label>
+								<input type="password" name="passR" id="passIDR" class="form-control" />
+							</div>
+							<div class="text-center">
+								<button type="submit" class="btn-pixel">Crear cuenta</button>
 							</div>
 						</div>
 					</div>
-				</div>
-				<%
-						hayComms = comments.next();
-					}
-					%>
+				</form>
 			</div>
 		</div>
 	</div>

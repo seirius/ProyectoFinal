@@ -48,12 +48,12 @@ public class IniciarSesion extends HttpServlet {
 				session.setMaxInactiveInterval(120);
 			}
 			
-			response.sendRedirect(request.getContextPath() + "/jsps/" + page + ".jsp");
+			response.sendRedirect(request.getContextPath() + "/jsps/" + page);
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} catch(ErrorLogico e) {
-			response.sendRedirect(request.getContextPath() + "/jsps/" + page + ".jsp");
+			response.sendRedirect(request.getContextPath() + "/jsps/" + page);
 		} catch(ErrorNoLogico e) {
 			e.printStackTrace();
 		} finally {

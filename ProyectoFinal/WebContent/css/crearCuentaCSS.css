@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+/***CAJA-CONTENIDO***/
+
+#caja-contenido {
+	border: 32px solid transparent;
+	border-image: url("/ProyectoFinal/img/Tests/dirt.png") 30% round;
+}
+
+#caja-contenido-fondo {
+	background-image: url("/ProyectoFinal/img/Tests/genBorderMainContent.png");
+}
+
+#caja-contenido-source {
+	font-family: consolas;
+	color: white;
+}

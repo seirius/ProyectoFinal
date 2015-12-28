@@ -47,6 +47,7 @@
 
 /***CAJA-GENERAL***/
 #caja-general {
+	min-height: 85.5vh;
 	background-image: url("/ProyectoFinal/img/blocks_bg.png");
 	padding-bottom: 3rem;
 }
@@ -126,6 +127,14 @@
 .btn-pixel:focus {
 	outline-width: 0px;
 	text-decoration: none;
+}
+
+.btn-pixel-blue {
+	background-color: #1b67d8;
+	border-top: 3px solid #8db3f1;
+	border-right: 3px solid #8db3f1;
+	border-left: 3px solid #153c75;
+	border-bottom: 3px solid #153c75;
 }
 
 /************************************************************************************/

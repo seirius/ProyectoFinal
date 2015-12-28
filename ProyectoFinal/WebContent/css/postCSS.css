@@ -12,3 +12,17 @@
 .panel-default > .post-comment {
 	background-color: #9ba7ce;
 }
+
+/***BOTONES***/
+
+#botonComentar {
+}
+
+/***COMENTAR POST***/
+
+#cajaComentarPost {
+}
+
+#textareaComentarioPost {
+	resize: none;
+}

@@ -46,7 +46,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=foro_principal" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=foro_principal.jsp" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -56,13 +56,16 @@
 					<input type="password" name="pass" class="form-control" id="passID" />
 				</div>
 				<div class="text-center">
-					<button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+					<button type="submit" class="btn-pixel">Iniciar Sesion</button>
+				</div>
+				<div class="margin-top-2">
+					<a href="<%= rootPath %>/jsps/crearCuentaUsuario.jsp">Crear cuenta</a>
 				</div>
 			</form>
 			<%
 			} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=foro_principal" method="POST">
+			<form action="<%= rootPath %>/CerrarSesion?page=foro_principal.jsp" method="POST">
 				<div class="row">
 					<h3 class="text-center"><%= usuario %></h3>
 				</div>
@@ -111,11 +114,17 @@
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
 			<div class="extend-to-parent position-relative" id="caja-contenido-source">
-
+				
+				<%
+				if (usuario != null) {
+				%>
 				<form class="margin-bot-1 margin-top-1" action="<%=rootPath%>/jsps/crearPost.jsp">
 					<button class="btn-pixel">Crear Post</button>
 				</form>
-
+				<%
+				}
+				%>
+				
 				<%
 				PostInfo postInfo = new PostInfo(connection);
 				ResultSet posts = postInfo.getAllPosts();

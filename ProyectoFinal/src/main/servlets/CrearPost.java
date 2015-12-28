@@ -30,12 +30,13 @@ public class CrearPost extends HttpServlet {
 		
 		String titulo = request.getParameter("tituloPost");
 		String texto = request.getParameter("textoPost");
+		String usuario = (String) request.getSession().getAttribute("usuario");
 		
 		try {
 			InitCon init = new InitCon(getServletContext());
 			connection = init.getConnection();
 			PostInfo post = new PostInfo(connection);
-			int idPost = post.createPost(titulo, texto, null, null);
+			int idPost = post.createPost(titulo, texto, null, null, usuario);
 			request.setAttribute("idPost", new Integer(idPost));
 			response.sendRedirect(request.getContextPath() + "/jsps/foro_principal.jsp");
 		} catch(SQLException e) {

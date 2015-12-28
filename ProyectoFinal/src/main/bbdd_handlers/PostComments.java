@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import main.util.ErrorLogico;
 import main.util.ErrorNoLogico;
 import main.util.MyUtil;
 
@@ -17,10 +18,10 @@ public class PostComments {
 		this.connection = connection;
 	}
 	
-	public void comment(int idPost, String texto) throws ErrorNoLogico {
+	public void comment(int idPost, String texto, String autor) throws ErrorNoLogico, ErrorLogico {
 		int idComment;
 		
-		if (MyUtil.isNull(texto)) throw new ErrorNoLogico("Texto no puede ser nulo");
+		if (MyUtil.isNull(texto)) throw new ErrorLogico("Texto no puede ser nulo");
 		
 		try {
 			connection.setAutoCommit(false);
@@ -28,7 +29,7 @@ public class PostComments {
 			PostInfo post = new PostInfo(connection);
 			idComment = post.getCommentID(idPost);
 			
-			insert(idComment, idPost, texto);
+			insert(idComment, idPost, texto, autor);
 			
 			connection.commit();
 		} catch(SQLException e) {
@@ -47,7 +48,7 @@ public class PostComments {
 		}
 	}
 	
-	public void respond(int idPost, String texto, int upLink) throws ErrorNoLogico {
+	public void respond(int idPost, String texto, int upLink, String autor) throws ErrorNoLogico {
 		int idComment;
 
 		if (MyUtil.isNull(texto)) throw new ErrorNoLogico("Texto no puede ser nulo");
@@ -58,7 +59,7 @@ public class PostComments {
 			PostInfo post = new PostInfo(connection);
 			idComment = post.getCommentID(idPost);
 			
-			insert(idComment, idPost, texto, upLink);
+			insert(idComment, idPost, texto, upLink, autor);
 			
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -99,7 +100,7 @@ public class PostComments {
 	public ResultSet getCommentsByPostID(int id) throws ErrorNoLogico {
 		
 		try {
-			String sql = "SELECT ID_COMMENT, TEXTO, FECHA_CREACION, UP_LINK FROM POST_COMMENTS WHERE ID_POST = " + id;
+			String sql = "SELECT ID_COMMENT, TEXTO, FECHA_CREACION, UP_LINK, AUTOR FROM POST_COMMENTS WHERE ID_POST = " + id + " ORDER BY FECHA_CREACION DESC";
 			Statement orden = connection.createStatement();
 			ResultSet cursor = orden.executeQuery(sql);
 			return cursor;
@@ -108,25 +109,27 @@ public class PostComments {
 		}
 	}
 	
-	public void insert(int idComment, int idPost, String texto) throws SQLException {
-		String sql = "INSERT INTO POST_COMMENTS (ID_COMMENT, ID_POST, TEXTO) "
-			   + "VALUES(?, ?, ?)";
-		PreparedStatement orden = connection.prepareStatement(sql);
-		orden.setInt(1, idComment);
-		orden.setInt(2, idPost);
-		orden.setString(3, texto);
-		
-		orden.executeUpdate();
-	}
-	
-	public void insert(int idComment, int idPost, String texto, int upLink) throws SQLException {
-		String sql = "INSERT INTO POST_COMMENTS (ID_COMMENT, ID_POST, TEXTO, UP_LINK) "
+	public void insert(int idComment, int idPost, String texto, String autor) throws SQLException {
+		String sql = "INSERT INTO POST_COMMENTS (ID_COMMENT, ID_POST, TEXTO, AUTOR) "
 			   + "VALUES(?, ?, ?, ?)";
 		PreparedStatement orden = connection.prepareStatement(sql);
 		orden.setInt(1, idComment);
 		orden.setInt(2, idPost);
 		orden.setString(3, texto);
+		orden.setString(4, autor);
+		
+		orden.executeUpdate();
+	}
+	
+	public void insert(int idComment, int idPost, String texto, int upLink, String autor) throws SQLException {
+		String sql = "INSERT INTO POST_COMMENTS (ID_COMMENT, ID_POST, TEXTO, UP_LINK, AUTOR) "
+			   + "VALUES(?, ?, ?, ?, ?)";
+		PreparedStatement orden = connection.prepareStatement(sql);
+		orden.setInt(1, idComment);
+		orden.setInt(2, idPost);
+		orden.setString(3, texto);
 		orden.setInt(4, upLink);
+		orden.setString(5, autor);
 		
 		orden.executeUpdate();
 	}

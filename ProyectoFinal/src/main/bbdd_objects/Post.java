@@ -9,8 +9,9 @@ public class Post {
 	public String etiqueta;
 	public long fechaCreacion;
 	public int commentContador;
+	public String autor;
 	
-	public Post(int id, String titulo, String texto, String imagenUrl, String etiqueta, long fechaCreacion, int commentContador) {
+	public Post(int id, String titulo, String texto, String imagenUrl, String etiqueta, long fechaCreacion, int commentContador, String autor) {
 		this.id = id;
 		this.titulo = titulo;
 		this.texto = texto;
@@ -18,5 +19,6 @@ public class Post {
 		this.etiqueta = etiqueta;
 		this.fechaCreacion = fechaCreacion;
 		this.commentContador = commentContador;
+		this.autor = autor;
 	}
 }

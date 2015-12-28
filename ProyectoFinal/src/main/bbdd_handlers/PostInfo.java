@@ -19,7 +19,7 @@ public class PostInfo {
 		this.connection = connection;
 	}
 	
-	public int createPost(String titulo, String texto, String imagenURL, String etiqueta) throws ErrorLogico, ErrorNoLogico {
+	public int createPost(String titulo, String texto, String imagenURL, String etiqueta, String autor) throws ErrorLogico, ErrorNoLogico {
 		int id;
 		
 		if (MyUtil.isNull(titulo)) throw new ErrorLogico("Titulo no puede ser nulo");
@@ -32,7 +32,7 @@ public class PostInfo {
 			PostContador postContador = new PostContador(connection);
 			id = postContador.getPostContador();
 			
-			insert(id, titulo, texto, imagenURL, etiqueta);
+			insert(id, titulo, texto, imagenURL, etiqueta, autor);
 			
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -108,15 +108,16 @@ public class PostInfo {
 		return resUpdate;
 	}
 	
-	public void insert(int id, String titulo, String texto, String imagenURL, String etiqueta) throws SQLException {
-		String sql = "INSERT INTO POST_INFO (ID, TITULO, TEXTO, IMAGEN_URL, ETIQUETA)"
-			+ "VALUES(?, ?, ?, ?, ?)";
+	public void insert(int id, String titulo, String texto, String imagenURL, String etiqueta, String autor) throws SQLException {
+		String sql = "INSERT INTO POST_INFO (ID, TITULO, TEXTO, IMAGEN_URL, ETIQUETA, AUTOR)"
+			+ "VALUES(?, ?, ?, ?, ?, ?)";
 		PreparedStatement orden = connection.prepareStatement(sql);
 		orden.setInt(1, id);
 		orden.setString(2, titulo);
 		orden.setString(3, texto);
 		orden.setString(4, imagenURL);
 		orden.setString(5, etiqueta);
+		orden.setString(6, autor);
 		
 		orden.executeUpdate();
 		orden.close();
@@ -142,7 +143,7 @@ public class PostInfo {
 	
 	public Post getSinglePost(int id) throws ErrorNoLogico {
 		try {
-			String sql = "SELECT TITULO, TEXTO, IMAGEN_URL, ETIQUETA, FECHA_CREACION, COMMENT_CONTADOR FROM POST_INFO WHERE ID = " + id;
+			String sql = "SELECT TITULO, TEXTO, IMAGEN_URL, ETIQUETA, FECHA_CREACION, COMMENT_CONTADOR, AUTOR FROM POST_INFO WHERE ID = " + id;
 			Statement orden = connection.createStatement();
 			ResultSet cursor = orden.executeQuery(sql);
 			cursor.next();
@@ -153,8 +154,9 @@ public class PostInfo {
 			String etiqueta = cursor.getString("ETIQUETA");
 			long fechaCreacion = cursor.getTimestamp("FECHA_CREACION").getTime();
 			int commentContador = cursor.getInt("COMMENT_CONTADOR");
+			String autor = cursor.getString("AUTOR");
 			
-			Post post = new Post(id, titulo, texto, imagenURL, etiqueta, fechaCreacion, commentContador);
+			Post post = new Post(id, titulo, texto, imagenURL, etiqueta, fechaCreacion, commentContador, autor);
 			
 			return post;
 			

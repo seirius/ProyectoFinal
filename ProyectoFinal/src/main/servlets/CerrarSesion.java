@@ -23,7 +23,7 @@ public class CerrarSesion extends HttpServlet {
 		HttpSession sesion = request.getSession();
 		sesion.invalidate();
 		String page = request.getParameter("page");
-		response.sendRedirect(request.getContextPath() + "/jsps/" + page + ".jsp");
+		response.sendRedirect(request.getContextPath() + "/jsps/" + page);
 	}
 
 }

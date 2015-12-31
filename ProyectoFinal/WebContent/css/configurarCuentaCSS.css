@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+/***CAJAS PARA ELEGIR AVATARES***/
+
+.caja-avatar-img {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	padding: 5px;
+}
+
+.ui-selected, .ui-selecting {
+	border: 5px solid green;
+}
+
+.avatares {
+	height: 100%;
+}
+
+/************************************************************************************/
+
+/***CAJA PARA CONFIGURAR***/
+
+.caja-bloque-configuracion {
+	font-size: 2.5rem;
+}
+
+/************************************************************************************/

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="dark_sky" match-name="avatar_img"/>
+  <table-filter match-catalog="dark_sky" match-name="cuentas_usuario"/>
+  <table-filter match-catalog="dark_sky" match-name="noticias_portada"/>
+  <table-filter match-catalog="dark_sky" match-name="post_comments"/>
+  <table-filter match-catalog="dark_sky" match-name="post_contador"/>
+  <table-filter match-catalog="dark_sky" match-name="post_info"/>
+  <table-filter match-catalog="dark_sky" match-name="usuario_info"/>
+</hibernate-reverse-engineering>

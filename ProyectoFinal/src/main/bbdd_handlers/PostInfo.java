@@ -109,7 +109,7 @@ public class PostInfo {
 	}
 	
 	public void insert(int id, String titulo, String texto, String imagenURL, String etiqueta, String autor) throws SQLException {
-		String sql = "INSERT INTO POST_INFO (ID, TITULO, TEXTO, IMAGEN_URL, ETIQUETA, AUTOR)"
+		String sql = "INSERT INTO POST_INFO (TITULO, TEXTO, IMAGEN_URL, ETIQUETA, AUTOR)"
 			+ "VALUES(?, ?, ?, ?, ?, ?)";
 		PreparedStatement orden = connection.prepareStatement(sql);
 		orden.setInt(1, id);

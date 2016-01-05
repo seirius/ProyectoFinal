@@ -1,11 +1,19 @@
 package main.controlador;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Order;
 
 import main.modelo.CuentasUsuario;
+import main.modelo.PostComments;
 import main.modelo.PostInfo;
 import main.util.ErrorNoLogico;
 
@@ -53,23 +61,57 @@ public class PostInfoControl {
 		}
 	}
 	
-//	public static void main(String[] args) {
-//		SessionFactory factory = null;
-//		try {
-//			factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
-//		} catch(HibernateException e) {
-//			e.printStackTrace();
-//			if (factory != null) factory.close();
-//		}
-//		PostInfoControl postControl = new PostInfoControl(factory);
-//		
-//		try {
-//			System.out.println(postControl.crearPost("Prueba1", "jaijs HELLO FCKING WORLD", null, null, "Andriy"));
-//		} catch(ErrorNoLogico e) {
-//			e.printStackTrace();
-//		} finally {
-//			if (factory != null) factory.close();
-//		}
-//		
-//	}
+	public List<PostInfo> getPosts() throws ErrorNoLogico {
+		
+		Session session = factory.openSession();
+		
+		try {
+			Criteria criteria = session.createCriteria(PostInfo.class);
+			criteria.addOrder(Order.desc("fechaCreacion"));
+			
+			@SuppressWarnings("unchecked")
+			List<PostInfo> posts = criteria.list();
+			
+			return posts;
+		} catch(HibernateException e) {
+			throw new ErrorNoLogico(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+	public PostInfo getPostComentarios(int idPost) throws ErrorNoLogico {
+		Session session = factory.openSession();
+		
+		try {
+			
+			PostInfo post = (PostInfo) session.load(PostInfo.class, new Integer(idPost));
+			post.getPostCommentses().size();
+			
+			return post;
+		} catch (HibernateException e) {
+			throw new ErrorNoLogico(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+	public static void main(String[] args) {
+		SessionFactory factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
+		
+		try {
+			Session session = factory.openSession();
+			PostInfo post = (PostInfo) session.load(PostInfo.class, new Integer(5));
+			Set<PostComments> setCom = post.getPostCommentses();
+			List<PostComments> coms = new ArrayList<PostComments>();
+			coms.addAll(setCom);
+			System.out.println(coms.get(0).getTexto());
+			session.close();
+		} catch(HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			if (factory != null) factory.close();
+		}
+	}
+	
 }

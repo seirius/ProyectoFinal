@@ -9,7 +9,9 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class NoticiasPortadaId implements java.io.Serializable {
-
+	private static final long serialVersionUID = -730334096893244917L;
+	
+	
 	private String imagenUrl;
 	private String titulo;
 	private String texto;

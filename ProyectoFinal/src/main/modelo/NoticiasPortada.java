@@ -14,7 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "noticias_portada", catalog = "dark_sky")
 public class NoticiasPortada implements java.io.Serializable {
-
+	private static final long serialVersionUID = -5735106098152359350L;
+	
+	
 	private NoticiasPortadaId id;
 
 	public NoticiasPortada() {

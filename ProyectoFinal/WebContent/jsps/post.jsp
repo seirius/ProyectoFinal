@@ -1,11 +1,14 @@
-<%@page import="main.bbdd_handlers.PostComments"%>
-<%@page import="main.bbdd_objects.Post"%>
-<%@page import="main.util.UtilDates"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="main.connection.InitCon"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="java.util.Collections"%>
+<%@page import="main.util.DateComparator"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.hibernate.HibernateException"%>
+<%@page import="main.modelo.PostComments"%>
+<%@page import="java.util.Set"%>
+<%@page import="main.controlador.PostInfoControl"%>
+<%@page import="main.modelo.PostInfo"%>
+<%@page import="org.hibernate.cfg.Configuration"%>
+<%@page import="org.hibernate.SessionFactory"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,49 +16,49 @@
 <%
 	String rootPath = request.getContextPath();
 	int idPost = Integer.parseInt(request.getParameter("idPost"));
-	Connection connection = null;
-	InitCon init = new InitCon(application);
+	HttpSession userSession = request.getSession();
+	String usuario = (String) userSession.getAttribute("usuario");
+	String avatarURL = (String) userSession.getAttribute("avatarURL");
+	if (avatarURL == null)
+		avatarURL = "/img/Raw/Avatar/rawAvatar.png";
 	
+	SessionFactory factory = null;
 	try {
-		connection = init.getConnection();
-		HttpSession userSession = request.getSession();
-		String usuario = (String) userSession.getAttribute("usuario");
-		String avatarURL = (String) userSession.getAttribute("avatarURL");
-		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
+		factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
 		
-		PostInfo postInfo = new PostInfo(connection);
-		Post post = postInfo.getSinglePost(idPost);
-		
-		PostComments postComms = new PostComments(connection);
-		ResultSet comments = postComms.getCommentsByPostID(idPost);
-	%>
-<title>Dark Sky -
-	<%= post.titulo %></title>
+		PostInfoControl postControl = new PostInfoControl(factory);
+		PostInfo post = postControl.getPostComentarios(idPost);
+		Set<PostComments> setCom = post.getPostCommentses();
+		List<PostComments> comentarios = new ArrayList<PostComments>();
+		comentarios.addAll(setCom);
+		Collections.sort(comentarios, new DateComparator());
+%>
+<title>Dark Sky - <%=post.getTitulo()%></title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale = 1" />
-<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/foroCSS.css" />
-<link rel="stylesheet" href="<%= rootPath %>/css/postCSS.css" />
-<script src="<%= rootPath %>/js/jquery.js"></script>
-<script src="<%= rootPath %>/js/jquery-ui.js"></script>
-<script src="<%= rootPath %>/js/bootstrap.js"></script>
+<link rel="stylesheet" href="<%=rootPath%>/css/bootstrap.css" />
+<link rel="stylesheet" href="<%=rootPath%>/css/myFonts.css" />
+<link rel="stylesheet" href="<%=rootPath%>/css/jquery-ui.css" />
+<link rel="stylesheet" href="<%=rootPath%>/css/generalCSS.css" />
+<link rel="stylesheet" href="<%=rootPath%>/css/foroCSS.css" />
+<link rel="stylesheet" href="<%=rootPath%>/css/postCSS.css" />
+<script src="<%=rootPath%>/js/jquery.js"></script>
+<script src="<%=rootPath%>/js/jquery-ui.js"></script>
+<script src="<%=rootPath%>/js/bootstrap.js"></script>
 </head>
 <body>
 	<!-- CAJA-IMAGEN-AVATAR -->
 	<div id="caja-imagen-avatar" class="position-fixed">
-		<img src="<%= rootPath %><%= avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
+		<img src="<%=rootPath%><%=avatarURL%>" alt="imagenAvatar" id="imagenAvatar" />
 	</div>
 
 	<div class="position-fixed" id="caja-login">
 		<div class="extend-to-parent position-relative" id="caja-login-sliding">
 			<div class="extend-to-parent position-absolute" id="caja-login-sliding-fondo"></div>
 			<%
-			if (usuario == null) {
+				if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=post.jsp?idPost=<%= idPost %>" method="POST">
+			<form action="<%=rootPath%>/IniciarSesion?page=post.jsp?idPost=<%=idPost%>" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -68,22 +71,22 @@
 					<button type="submit" class="btn-pixel">Iniciar Sesion</button>
 				</div>
 				<div class="margin-top-2">
-					<a href="<%= rootPath %>/jsps/crearCuentaUsuario.jsp">Crear cuenta</a>
+					<a href="<%=rootPath%>/jsps/crearCuentaUsuario.jsp">Crear cuenta</a>
 				</div>
 			</form>
 			<%
-			} else {
+				} else {
 			%>
-			<form action="<%= rootPath %>/CerrarSesion?page=post.jsp?idPost=<%= idPost %>" method="POST">
+			<form action="<%=rootPath%>/CerrarSesion?page=post.jsp?idPost=<%=idPost%>" method="POST">
 				<div class="row">
-					<h3 class="text-center"><%= usuario %></h3>
+					<h3 class="text-center"><%=usuario%></h3>
 				</div>
 				<div class="row text-center">
 					<button type="submit" class="btn btn-primary">Cerrar Sesion</button>
 				</div>
 			</form>
 			<%
-			}
+				}
 			%>
 		</div>
 	</div>
@@ -106,10 +109,10 @@
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="<%= rootPath %>/jsps/principal.jsp">Pagina Principal</a>
+							<a href="<%=rootPath%>/jsps/principal.jsp">Pagina Principal</a>
 						</li>
 						<li class="myActive">
-							<a href="<%= rootPath %>/jsps/foro_principal.jsp">Foro</a>
+							<a href="<%=rootPath%>/jsps/foro_principal.jsp">Foro</a>
 						</li>
 					</ul>
 				</div>
@@ -127,25 +130,27 @@
 				<!-- POST TITULO/TEXTO -->
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading post-titulo"><%= post.titulo %> by <%= post.autor %></div>
-						<div class="panel-body post-body"><%= post.texto %></div>
+						<div class="panel-heading post-titulo"><%=post.getTitulo()%>
+							by
+							<%=post.getCuentasUsuario().getUsuario()%></div>
+						<div class="panel-body post-body"><%=post.getTexto()%></div>
 					</div>
 				</div>
 
 				<!-- POST BOTON/COMENTAR -->
-				
+
 				<%
-				if (usuario != null) {
+					if (usuario != null) {
 				%>
 				<div class="col-lg-offset-2 col-lg-8">
 					<button class="btn-pixel btn-block" id="botonComentar" data-toggle="collapse" data-target="#cajaComentarPost">Comentar</button>
 				</div>
 				<%
-				}
+					}
 				%>
 
-				<div class="collapse" id="cajaComentarPost">
-					<form action="<%= rootPath %>/PublicarComentario?idPost=<%= idPost %>" method="POST">
+				<div class="collapse col-xs-12" id="cajaComentarPost">
+					<form action="<%=rootPath%>/PublicarComentario?idPost=<%=idPost%>" method="POST">
 						<div class="margin-top-2 col-lg-offset-2 col-lg-8">
 							<textarea class="form-control" name="textareaComentarioPost" id="textareaComentarioPost" maxLength="400" rows="8"></textarea>
 						</div>
@@ -156,42 +161,37 @@
 				</div>
 
 				<!-- POST COMENTARIOS DEL POST -->
-				<% 
-					boolean hayComms = comments.next();
-					while (hayComms) {
-					%>
+				<%
+					for (PostComments comentario: comentarios) {
+				%>
 				<div class="col-lg-12">
 					<div class="panel panel-default margin-top-2">
 						<div class="panel-body post-comment">
-							<div class="col-lg-8"><%= comments.getString("TEXTO") %></div>
+							<div class="col-lg-8"><%=comentario.getTexto()%></div>
 							<div class="col-lg-4">
-								<%= UtilDates.timestampToString(comments.getTimestamp("FECHA_CREACION"), "dd-MM-yy HH:mm:ss") %> || Publicado por <%= comments.getString("AUTOR") %>
+								<%=comentario.getFechaCreacion()%>
+								|| Publicado por
+								<%=comentario.getCuentasUsuario().getUsuario()%>
 							</div>
 						</div>
 					</div>
 				</div>
 				<%
-						hayComms = comments.next();
-					}
-					%>
+						}
+				%>
 			</div>
 		</div>
 	</div>
 	<%
-	} catch(SQLException e) {
-		%>
-	<h2><%= e.getMessage() %></h2>
-	<%
-	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
+		} catch (HibernateException e) {
 			%>
-	<h2><%= e.getMessage() %></h2>
-	<%	
+			<h2><%=e.getMessage()%></h2>
+			<%
+			e.printStackTrace();
+		} finally {
+			if (factory != null) factory.close();
 		}
-	}
 	%>
-	<script src="<%= rootPath %>/js/generalScript.js"></script>
+	<script src="<%=rootPath%>/js/generalScript.js"></script>
 </body>
 </html>

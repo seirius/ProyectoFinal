@@ -1,16 +1,22 @@
-<%@page import="main.util.UtilDates"%>
+<%@page import="main.modelo.PostInfo"%>
+<%@page import="java.util.List"%>
+<%@page import="main.controlador.PostInfoControl"%>
+<%@page import="org.hibernate.HibernateException"%>
+<%@page import="org.hibernate.cfg.Configuration"%>
+<%@page import="org.hibernate.SessionFactory"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="main.connection.InitCon"%>
-<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <%
 	String rootPath = request.getContextPath();
-	%>
+	HttpSession userSession = request.getSession();
+	String usuario = (String) userSession.getAttribute("usuario");
+	String avatarURL = (String) userSession.getAttribute("avatarURL");
+	if (avatarURL == null)
+		avatarURL = "/img/Raw/Avatar/rawAvatar.png";
+%>
 <title>Dark Sky - Foro</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale = 1" />
@@ -25,19 +31,14 @@
 </head>
 <body>
 	<%
-	Connection connection = null;
-	InitCon init = new InitCon(application);
+	SessionFactory factory = null;
 	
 	try {
-		connection = init.getConnection();
-		HttpSession userSession = request.getSession();
-		String usuario = (String) userSession.getAttribute("usuario");
-		String avatarURL = (String) userSession.getAttribute("avatarURL");
-		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
+		factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
 	%>
 	<!-- CAJA-IMAGEN-AVATAR -->
 	<div id="caja-imagen-avatar" class="position-fixed">
-		<img src="<%= rootPath %><%= avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
+		<img src="<%= rootPath + avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
 	</div>
 
 	<div class="position-fixed" id="caja-login">
@@ -126,37 +127,27 @@
 				%>
 				
 				<%
-				PostInfo postInfo = new PostInfo(connection);
-				ResultSet posts = postInfo.getAllPosts();
-				boolean hayPosts = posts.next();
-				while(hayPosts) {
-				
+				PostInfoControl postControl = new PostInfoControl(factory);
+				List<PostInfo> posts = postControl.getPosts();
+				for (PostInfo post: posts) {
 				%>
 				<div class="panel panel-default">
-					<div class="panel-heading post-titulo"><a href="<%= rootPath %>/jsps/post.jsp?idPost=<%= posts.getInt("ID") %>"><%= posts.getString("TITULO") %></a></div>
-					<div class="panel-body post-body"><%= UtilDates.timestampToString(posts.getTimestamp("FECHA_CREACION"), "dd/MM/yy HH:mm:ss") %></div>
+					<div class="panel-heading post-titulo"><a href="<%= rootPath %>/jsps/post.jsp?idPost=<%= post.getId() %>"><%= post.getTitulo() %></a></div>
+					<div class="panel-body post-body"><%= post.getFechaCreacion().toString() %></div>
 				</div>
 				<%
-				
-				hayPosts = posts.next();
-			}
+				}
 			%>
 			</div>
 		</div>
 	</div>
 	<%
-	} catch(SQLException e) {
+	} catch(HibernateException e) {
 		%>
-	<h2><%= e.getMessage() %></h2>
-	<%
+		<h2><%= e.getMessage() %></h2>
+		<%
 	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-	<h2><%= e.getMessage() %></h2>
-	<%	
-		}
+		if (factory != null) factory.close();
 	}
 	%>
 	<script src="<%= rootPath %>/js/generalScript.js"></script>

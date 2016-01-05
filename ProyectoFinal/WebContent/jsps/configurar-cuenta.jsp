@@ -1,28 +1,28 @@
-<%@page import="main.bbdd_handlers.Avatares"%>
-<%@page import="main.bbdd_handlers.PostComments"%>
-<%@page import="main.bbdd_objects.Post"%>
-<%@page import="main.util.UtilDates"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="main.connection.InitCon"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="main.controlador.servlets.AvatarImgControl"%>
+<%@page import="main.modelo.AvatarImg"%>
+<%@page import="java.util.List"%>
+<%@page import="org.hibernate.cfg.Configuration"%>
+<%@page import="org.hibernate.HibernateException"%>
+<%@page import="org.hibernate.SessionFactory"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <%
 	String rootPath = request.getContextPath();
-	Connection connection = null;
-	InitCon init = new InitCon(application);
+	HttpSession userSession = request.getSession();
+	String usuario = (String) userSession.getAttribute("usuario");
+	String avatarURL = (String) userSession.getAttribute("avatarURL");
+	if (avatarURL == null)
+		avatarURL = "/img/Raw/Avatar/rawAvatar.png";
 	
+	SessionFactory factory = null;
 	try {
-		connection = init.getConnection();
-		HttpSession userSession = request.getSession();
-		String usuario = (String) userSession.getAttribute("usuario");
-		String avatarURL = (String) userSession.getAttribute("avatarURL");
-		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
-	%>
+		factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
+		
+		AvatarImgControl avatarControl = new AvatarImgControl(factory);
+		List<AvatarImg> avatares = avatarControl.getAvatares();
+%>
 <title>Dark Sky - Configurar Cuenta</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale = 1" />
@@ -122,16 +122,12 @@
 				<div class="col-lg-4">
 					<div id="seleccion-avatar">
 						<%
-							Avatares avataresBBDD = new Avatares(connection);
-							ResultSet avatares = avataresBBDD.getAll();
-							boolean hayAvatares = avatares.next();
-							while (hayAvatares) {
+							for (AvatarImg avatar: avatares) {
 						%>
 						<div class="caja-avatar-img text-center">
-							<img src="<%=rootPath%><%=avatares.getString("URL_AVATAR")%>" alt="<%=avatares.getString("NOMBRE_AVATAR")%>" class="avatares" />
+							<img src="<%=rootPath%><%=avatar.getUrlAvatar()%>" alt="<%=avatar.getNombreAvatar()%>" class="avatares" />
 						</div>
 						<%
-								hayAvatares = avatares.next();
 							}
 						%>
 					</div>
@@ -145,18 +141,13 @@
 		</div>
 	</div>
 	<%
-		} catch (SQLException e) {
-	%>
-	<h2><%= e.getMessage() %></h2>
-	<%
+	} catch(HibernateException e) {
+		%>
+		<h2><%= e.getMessage() %></h2>
+		<%
+		e.printStackTrace();
 	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-	<h2><%= e.getMessage() %></h2>
-	<%	
-		}
+		if (factory != null) factory.close();
 	}
 	%>
 	<script src="<%= rootPath %>/js/generalScript.js"></script>

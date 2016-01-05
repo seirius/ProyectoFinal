@@ -1,42 +1,34 @@
-<%@page import="main.connection.InitCon"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="main.util.ErrorNoLogico"%>
-<%@page import="java.sql.SQLException"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<%
+<%
 	String rootPath = request.getContextPath();
 	%>
-	<title>Dark Sky - Pagina Principal</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<meta name="viewport" content="width=device-width, initial-scale = 1" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
-	<link rel="stylesheet" href="<%= rootPath %>/css/principalCSS.css" />
-	<script src="<%= rootPath %>/js/jquery.js"></script>
-	<script src="<%= rootPath %>/js/jquery-ui.js"></script>
-	<script src="<%= rootPath %>/js/bootstrap.js"></script>
+<title>Dark Sky - Pagina Principal</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale = 1" />
+<link rel="stylesheet" href="<%= rootPath %>/css/bootstrap.css" />
+<link rel="stylesheet" href="<%= rootPath %>/css/myFonts.css" />
+<link rel="stylesheet" href="<%= rootPath %>/css/jquery-ui.css" />
+<link rel="stylesheet" href="<%= rootPath %>/css/generalCSS.css" />
+<link rel="stylesheet" href="<%= rootPath %>/css/principalCSS.css" />
+<script src="<%= rootPath %>/js/jquery.js"></script>
+<script src="<%= rootPath %>/js/jquery-ui.js"></script>
+<script src="<%= rootPath %>/js/bootstrap.js"></script>
 </head>
 <body>
 	<%
-	Connection connection = null;
-	InitCon init = new InitCon(application);
-	
-	try {
-		connection = init.getConnection();
 		HttpSession userSession = request.getSession();
 		String usuario = (String) userSession.getAttribute("usuario");
+		String avatarURL = (String) userSession.getAttribute("avatarURL");
+		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
 	%>
 	<!-- CAJA-IMAGEN-AVATAR -->
 	<div id="caja-imagen-avatar" class="position-fixed">
-		<img src="<%= rootPath %>/img/Raw/Avatar/rawAvatar.png" alt="imagenAvatar" id="imagenAvatar" />
+		<img src="<%= rootPath + avatarURL %>" alt="imagenAvatar" id="imagenAvatar" />
 	</div>
-	
+
 	<div class="position-fixed" id="caja-login">
 		<div class="extend-to-parent position-relative" id="caja-login-sliding">
 			<div class="extend-to-parent position-absolute" id="caja-login-sliding-fondo"></div>
@@ -75,7 +67,7 @@
 			%>
 		</div>
 	</div>
-	
+
 	<!-- CABECERA + MENU -->
 	<div class="container-fluid" id="cabecera">
 		<div class="row">
@@ -104,29 +96,15 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- CAJA GENERAL -->
 	<div class="container-fluid" id="caja-general">
-	
-	<!-- CAJA CONTENIDO -->
+
+		<!-- CAJA CONTENIDO -->
 		<div class="container position-relative no-padding margin-top-2" id="caja-contenido">
 			<div class="extend-to-parent position-absolute" id="caja-contenido-fondo"></div>
 		</div>
 	</div>
-	<%
-	} catch(SQLException e) {
-		%>
-		<h2><%= e.getMessage() %></h2>
-		<%
-	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-			<h2><%= e.getMessage() %></h2>
-			<%	
-		}
-	}
-	%>
 	<script src="<%= rootPath %>/js/generalScript.js"></script>
 </body>
 </html>

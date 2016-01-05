@@ -27,11 +27,6 @@
 </head>
 <body>
 	<%
-	Connection connection = null;
-	InitCon init = new InitCon(application);
-	
-	try {
-		connection = init.getConnection();
 		HttpSession userSession = request.getSession();
 		String usuario = (String) userSession.getAttribute("usuario");
 		String avatarURL = (String) userSession.getAttribute("avatarURL");
@@ -143,21 +138,6 @@
 			</div>
 		</div>
 	</div>
-	<%
-	} catch(SQLException e) {
-		%>
-		<h2><%= e.getMessage() %></h2>
-		<%
-	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-			<h2><%= e.getMessage() %></h2>
-			<%	
-		}
-	}
-	%>
 	<script src="<%= rootPath %>/js/generalScript.js"></script>
 </body>
 </html>

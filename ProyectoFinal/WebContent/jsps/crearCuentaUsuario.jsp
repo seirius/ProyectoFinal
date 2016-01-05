@@ -1,27 +1,15 @@
-<%@page import="main.bbdd_handlers.PostComments"%>
-<%@page import="main.bbdd_objects.Post"%>
-<%@page import="main.util.UtilDates"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="main.bbdd_handlers.PostInfo"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="main.connection.InitCon"%>
-<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <%
 	String rootPath = request.getContextPath();
-	Connection connection = null;
-	InitCon init = new InitCon(application);
-	
-	try {
-		connection = init.getConnection();
-		HttpSession userSession = request.getSession();
-		String usuario = (String) userSession.getAttribute("usuario");
-		String avatarURL = (String) userSession.getAttribute("avatarURL");
-		if (avatarURL == null) avatarURL = "/img/Raw/Avatar/rawAvatar.png";
-	%>
+	HttpSession userSession = request.getSession();
+	String usuario = (String) userSession.getAttribute("usuario");
+	String avatarURL = (String) userSession.getAttribute("avatarURL");
+	if (avatarURL == null)
+		avatarURL = "/img/Raw/Avatar/rawAvatar.png";
+%>
 <title>Dark Sky - Crear Cuenta</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale = 1" />
@@ -46,7 +34,7 @@
 			<%
 			if (usuario == null) {
 			%>
-			<form action="<%= rootPath %>/IniciarSesion?page=crearCuentaUsuario.jsp" method="POST">
+			<form action="<%= rootPath %>/IniciarSesion?page=principal.jsp" method="POST">
 				<div class="form-group">
 					<label for="usuarioID">Usuario</label>
 					<input type="text" name="usuario" class="form-control" id="usuarioID" />
@@ -138,21 +126,6 @@
 			</div>
 		</div>
 	</div>
-	<%
-	} catch(SQLException e) {
-		%>
-	<h2><%= e.getMessage() %></h2>
-	<%
-	} finally {
-		try {
-			if (connection != null) connection.close();
-		} catch(SQLException e) {
-			%>
-	<h2><%= e.getMessage() %></h2>
-	<%	
-		}
-	}
-	%>
 	<script src="<%= rootPath %>/js/generalScript.js"></script>
 </body>
 </html>

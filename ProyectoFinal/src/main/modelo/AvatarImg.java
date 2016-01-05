@@ -12,7 +12,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "avatar_img", catalog = "dark_sky")
 public class AvatarImg implements java.io.Serializable {
-
+	private static final long serialVersionUID = -3461528630481193405L;
+	
+	
 	private String nombreAvatar;
 	private String urlAvatar;
 

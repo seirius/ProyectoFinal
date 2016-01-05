@@ -1,17 +1,20 @@
-package main.servlets;
+package main.controlador.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.bbdd_handlers.PostInfo;
-import main.connection.InitCon;
-import main.util.ErrorLogico;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import main.controlador.CuentasUsuarioControl;
+import main.controlador.PostInfoControl;
+import main.modelo.CuentasUsuario;
+import main.modelo.PostInfo;
 import main.util.ErrorNoLogico;
 
 public class CrearPost extends HttpServlet {
@@ -26,36 +29,29 @@ public class CrearPost extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Connection connection = null;
+		SessionFactory factory = null;
 		
 		String titulo = request.getParameter("tituloPost");
 		String texto = request.getParameter("textoPost");
 		String usuario = (String) request.getSession().getAttribute("usuario");
 		
 		try {
-			InitCon init = new InitCon(getServletContext());
-			connection = init.getConnection();
-			PostInfo post = new PostInfo(connection);
-			int idPost = post.createPost(titulo, texto, null, null, usuario);
+			factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
+			
+			CuentasUsuarioControl cuentasControl = new CuentasUsuarioControl(factory);
+			CuentasUsuario autor = cuentasControl.getCuenta(usuario);
+			
+			PostInfoControl postControl = new PostInfoControl(factory);
+			PostInfo post = postControl.crearPost(titulo, texto, null, null, autor);
+			int idPost = post.getId();
 			request.setAttribute("idPost", new Integer(idPost));
 			response.sendRedirect(request.getContextPath() + "/jsps/foro_principal.jsp");
-		} catch(SQLException e) {
-			//Temporal <- Importante
+		} catch (HibernateException e) {
 			e.printStackTrace();
-		} catch(ErrorNoLogico e) {
-			//Temporal <- Importante
+		} catch (ErrorNoLogico e) {
 			e.printStackTrace();
-			response.sendRedirect(request.getContextPath() + "/jsps/crearPost.jsp");
-		} catch(ErrorLogico e) {
-			//Temporal <- Importante
-			e.printStackTrace();
-			response.sendRedirect(request.getContextPath() + "/jsps/crearPost.jsp");
 		} finally {
-			try {
-				if (connection != null) connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (factory != null) factory.close();
 		}
 	}
 

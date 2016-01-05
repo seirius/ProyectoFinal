@@ -1,17 +1,19 @@
-package main.servlets;
+package main.controlador.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.bbdd_handlers.PostComments;
-import main.connection.InitCon;
-import main.util.ErrorLogico;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import main.controlador.ComentariosControl;
+import main.controlador.CuentasUsuarioControl;
+import main.modelo.CuentasUsuario;
 import main.util.ErrorNoLogico;
 
 public class PublicarComentario extends HttpServlet {
@@ -28,29 +30,29 @@ public class PublicarComentario extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int idPost = Integer.parseInt(request.getParameter("idPost"));
 		
-		Connection connection = null;
+		SessionFactory factory = null;
 		
-		InitCon init = new InitCon(getServletContext());
 		String usuario = (String) request.getSession().getAttribute("usuario");
+		String texto = request.getParameter("textareaComentarioPost");
 		
 		try {
-			connection = init.getConnection();
-			PostComments postComments = new PostComments(connection);
-			postComments.comment(idPost, request.getParameter("textareaComentarioPost"), usuario);
+			factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
+			
+			CuentasUsuarioControl cuentasControl = new CuentasUsuarioControl(factory);
+			CuentasUsuario cuenta = cuentasControl.getCuenta(usuario);
+			
+			ComentariosControl comControl = new ComentariosControl(factory);
+			comControl.comentar(idPost, texto, 0, cuenta);
+			
 			response.sendRedirect("jsps/post.jsp?idPost=" + idPost);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ErrorLogico e) {
+		} catch (HibernateException e) {
 			e.printStackTrace();
 		} catch (ErrorNoLogico e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (connection != null) connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (factory != null) factory.close();
 		}
+		
 	}
 
 }

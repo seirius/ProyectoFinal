@@ -20,7 +20,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "cuentas_usuario", catalog = "dark_sky")
 public class CuentasUsuario implements java.io.Serializable {
-
+	private static final long serialVersionUID = -6496473278429364205L;
+	
+	
 	private String usuario;
 	private String pass;
 	private Date fechaCreacion;

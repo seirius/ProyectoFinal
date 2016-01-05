@@ -20,7 +20,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "post_comments", catalog = "dark_sky")
 public class PostComments implements java.io.Serializable {
-
+	private static final long serialVersionUID = -5668715867187965213L;
+	
+	
 	private PostCommentsId id;
 	private CuentasUsuario cuentasUsuario;
 	private PostInfo postInfo;
@@ -37,6 +39,14 @@ public class PostComments implements java.io.Serializable {
 		this.postInfo = postInfo;
 		this.texto = texto;
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public PostComments(PostCommentsId id, CuentasUsuario cuentasUsuario, PostInfo postInfo, String texto, Integer upLink) {
+		this.id = id;
+		this.cuentasUsuario = cuentasUsuario;
+		this.postInfo = postInfo;
+		this.texto = texto;
+		this.upLink = upLink;
 	}
 
 	public PostComments(PostCommentsId id, CuentasUsuario cuentasUsuario, PostInfo postInfo, String texto, Date fechaCreacion, Integer upLink) {
@@ -90,7 +100,7 @@ public class PostComments implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "FECHA_CREACION", nullable = false, length = 19)
+	@Column(name = "FECHA_CREACION", nullable = true, length = 19)
 	public Date getFechaCreacion() {
 		return this.fechaCreacion;
 	}

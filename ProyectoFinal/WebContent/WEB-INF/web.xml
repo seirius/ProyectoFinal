@@ -12,7 +12,7 @@
   </welcome-file-list>
   <servlet>
     <servlet-name>CrearPost</servlet-name>
-    <servlet-class>main.servlets.CrearPost</servlet-class>
+    <servlet-class>main.controlador.servlets.CrearPost</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CrearPost</servlet-name>
@@ -20,7 +20,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>PublicarComentario</servlet-name>
-    <servlet-class>main.servlets.PublicarComentario</servlet-class>
+    <servlet-class>main.controlador.servlets.PublicarComentario</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>PublicarComentario</servlet-name>
@@ -28,7 +28,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>CrearCuentaUsuario</servlet-name>
-    <servlet-class>main.servlets.CrearCuentaUsuario</servlet-class>
+    <servlet-class>main.controlador.servlets.CrearCuentaUsuario</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CrearCuentaUsuario</servlet-name>
@@ -36,7 +36,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>IniciarSesion</servlet-name>
-    <servlet-class>main.servlets.IniciarSesion</servlet-class>
+    <servlet-class>main.controlador.servlets.IniciarSesion</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>IniciarSesion</servlet-name>
@@ -44,7 +44,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>CerrarSesion</servlet-name>
-    <servlet-class>main.servlets.CerrarSesion</servlet-class>
+    <servlet-class>main.controlador.servlets.CerrarSesion</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CerrarSesion</servlet-name>
@@ -52,7 +52,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GuardarCambios</servlet-name>
-    <servlet-class>main.servlets.GuardarCambios</servlet-class>
+    <servlet-class>main.controlador.servlets.GuardarCambios</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GuardarCambios</servlet-name>

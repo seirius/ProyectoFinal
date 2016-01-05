@@ -23,7 +23,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "post_info", catalog = "dark_sky")
 public class PostInfo implements java.io.Serializable {
-
+	private static final long serialVersionUID = 402000608296027064L;
+	
+	
 	private Integer id;
 	private CuentasUsuario cuentasUsuario;
 	private String titulo;

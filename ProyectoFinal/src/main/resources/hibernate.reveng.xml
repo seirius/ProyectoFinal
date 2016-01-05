@@ -6,7 +6,6 @@
   <table-filter match-catalog="dark_sky" match-name="cuentas_usuario"/>
   <table-filter match-catalog="dark_sky" match-name="noticias_portada"/>
   <table-filter match-catalog="dark_sky" match-name="post_comments"/>
-  <table-filter match-catalog="dark_sky" match-name="post_contador"/>
   <table-filter match-catalog="dark_sky" match-name="post_info"/>
   <table-filter match-catalog="dark_sky" match-name="usuario_info"/>
 </hibernate-reverse-engineering>

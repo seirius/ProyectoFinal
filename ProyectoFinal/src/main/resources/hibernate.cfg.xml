@@ -17,7 +17,6 @@
         <mapping class="main.modelo.UsuarioInfo" />
         <mapping class="main.modelo.PostInfo" />
         <mapping class="main.modelo.PostComments" />
-        <mapping class="main.modelo.PostContador" />
         <mapping class="main.modelo.AvatarImg" />
     </session-factory>
 </hibernate-configuration>

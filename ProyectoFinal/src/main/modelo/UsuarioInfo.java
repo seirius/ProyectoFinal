@@ -18,7 +18,9 @@ import org.hibernate.annotations.Parameter;
 @Entity
 @Table(name = "usuario_info", catalog = "dark_sky")
 public class UsuarioInfo implements java.io.Serializable {
-
+	private static final long serialVersionUID = -307752764807793789L;
+	
+	
 	private String usuario;
 	private CuentasUsuario cuentasUsuario;
 	private String avatarUrl;

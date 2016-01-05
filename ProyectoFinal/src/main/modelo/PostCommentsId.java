@@ -9,7 +9,9 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class PostCommentsId implements java.io.Serializable {
-
+	private static final long serialVersionUID = 7444098622455459881L;
+	
+	
 	private int idComment;
 	private int idPost;
 

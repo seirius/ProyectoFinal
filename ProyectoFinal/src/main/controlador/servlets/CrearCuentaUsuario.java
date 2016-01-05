@@ -1,21 +1,25 @@
-package main.servlets;
+package main.controlador.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.bbdd_handlers.CuentasUsuario;
-import main.connection.InitCon;
-import main.util.ErrorLogico;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import main.controlador.CuentasUsuarioControl;
+import main.controlador.UsuarioInfoControl;
+import main.modelo.CuentasUsuario;
 import main.util.ErrorNoLogico;
 
 public class CrearCuentaUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final String DEFAULT_AVATAR_URL = "/img/Raw/Avatar/rawAvatar.png";
        
     public CrearCuentaUsuario() {
         super();
@@ -27,8 +31,7 @@ public class CrearCuentaUsuario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Connection connection = null;
-		InitCon init = new InitCon(getServletContext());
+		SessionFactory factory = null;
 		
 		String usuario = request.getParameter("usuario");
 		String pass = request.getParameter("pass");
@@ -40,24 +43,23 @@ public class CrearCuentaUsuario extends HttpServlet {
 		}
 		
 		try {
-			connection = init.getConnection();
+			factory = new Configuration().configure("/main/resources/hibernate.cfg.xml").buildSessionFactory();
 			
-			CuentasUsuario cuentasUsuario = new CuentasUsuario(connection);
-			cuentasUsuario.ingresarCuentaUsuario(usuario, pass);
+			CuentasUsuarioControl cuentasControl = new CuentasUsuarioControl(factory);
+			CuentasUsuario cuenta = cuentasControl.crear(usuario, pass);
+			
+			UsuarioInfoControl infoControl = new UsuarioInfoControl(factory);
+			infoControl.crear(cuenta, DEFAULT_AVATAR_URL);
+			
 			response.sendRedirect(request.getContextPath() + "/jsps/principal.jsp");
-		} catch (SQLException e) {
+		} catch (HibernateException e) {
 			e.printStackTrace();
 		} catch (ErrorNoLogico e) {
 			e.printStackTrace();
-		} catch (ErrorLogico e) {
-			e.printStackTrace();
 		} finally {
-			try {
-				if (connection != null) connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (factory != null) factory.close();
 		}
+		
 	}
 
 }

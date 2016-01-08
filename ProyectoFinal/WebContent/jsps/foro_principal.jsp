@@ -1,3 +1,4 @@
+<%@page import="main.util.UtilDates"%>
 <%@page import="main.modelo.PostInfo"%>
 <%@page import="java.util.List"%>
 <%@page import="main.controlador.PostInfoControl"%>
@@ -133,7 +134,7 @@
 				%>
 				<div class="panel panel-default">
 					<div class="panel-heading post-titulo"><a href="<%= rootPath %>/jsps/post.jsp?idPost=<%= post.getId() %>"><%= post.getTitulo() %></a></div>
-					<div class="panel-body post-body"><%= post.getFechaCreacion().toString() %></div>
+					<div class="panel-body post-body"><%= UtilDates.dateToString(post.getFechaCreacion(), "dd-MM-yy | HH:mm:ss") %></div>
 				</div>
 				<%
 				}

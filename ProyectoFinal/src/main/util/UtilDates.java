@@ -17,4 +17,9 @@ public class UtilDates {
 		SimpleDateFormat format = new SimpleDateFormat(mask);
 		return format.format(date);
 	}
+	
+	public static String dateToString(Date date, String mask) {
+		SimpleDateFormat format = new SimpleDateFormat(mask);
+		return format.format(date);
+	}
 }

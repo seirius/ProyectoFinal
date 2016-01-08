@@ -1,3 +1,4 @@
+<%@page import="main.util.UtilDates"%>
 <%@page import="java.util.Collections"%>
 <%@page import="main.util.DateComparator"%>
 <%@page import="java.util.ArrayList"%>
@@ -169,7 +170,7 @@
 						<div class="panel-body post-comment">
 							<div class="col-lg-8"><%=comentario.getTexto()%></div>
 							<div class="col-lg-4">
-								<%=comentario.getFechaCreacion()%>
+								<%=UtilDates.dateToString(comentario.getFechaCreacion(), "dd-MM-yy | HH:mm:ss")%>
 								|| Publicado por
 								<%=comentario.getCuentasUsuario().getUsuario()%>
 							</div>
